@@ -878,6 +878,21 @@ pop temp 0
 push constant 0
 return
 function Graphics.drawTriangleObstacle 3
+push argument 1
+push constant 0
+lt
+push argument 1
+push constant 32
+add
+push constant 239
+gt
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
 push argument 0
 pop local 0
 push constant 32
@@ -887,35 +902,35 @@ pop local 2
 push local 0
 push constant 0
 lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push local 1
 push local 0
 add
 pop local 1
 push constant 0
 pop local 0
-label IF_FALSE0
+label IF_FALSE1
 push local 0
 push local 1
 add
 push constant 511
 gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 511
 push local 0
 sub
 pop local 1
-label IF_FALSE1
+label IF_FALSE2
 push local 1
 push constant 0
 gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 not
 call Screen.setColor 1
@@ -958,10 +973,25 @@ add
 push argument 1
 call Screen.drawLine 4
 pop temp 0
-label IF_FALSE2
+label IF_FALSE3
 push constant 0
 return
 function Graphics.eraseTriangleObstacle 3
+push argument 1
+push constant 0
+lt
+push argument 1
+push constant 32
+add
+push constant 239
+gt
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
 push argument 0
 pop local 0
 push constant 32
@@ -971,35 +1001,35 @@ pop local 2
 push local 0
 push constant 0
 lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push local 1
 push local 0
 add
 pop local 1
 push constant 0
 pop local 0
-label IF_FALSE0
+label IF_FALSE1
 push local 0
 push local 1
 add
 push constant 511
 gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 511
 push local 0
 sub
 pop local 1
-label IF_FALSE1
+label IF_FALSE2
 push local 1
 push constant 0
 gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 call Screen.setColor 1
 pop temp 0
@@ -1041,10 +1071,25 @@ add
 push argument 1
 call Screen.drawLine 4
 pop temp 0
-label IF_FALSE2
+label IF_FALSE3
 push constant 0
 return
 function Graphics.drawSmallTriangleObstacle 3
+push argument 1
+push constant 0
+lt
+push argument 1
+push constant 16
+add
+push constant 239
+gt
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
 push argument 0
 pop local 0
 push constant 16
@@ -1054,35 +1099,35 @@ pop local 2
 push local 0
 push constant 0
 lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push local 1
 push local 0
 add
 pop local 1
 push constant 0
 pop local 0
-label IF_FALSE0
+label IF_FALSE1
 push local 0
 push local 1
 add
 push constant 511
 gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 511
 push local 0
 sub
 pop local 1
-label IF_FALSE1
+label IF_FALSE2
 push local 1
 push constant 0
 gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 not
 call Screen.setColor 1
@@ -1125,10 +1170,25 @@ add
 push argument 1
 call Screen.drawLine 4
 pop temp 0
-label IF_FALSE2
+label IF_FALSE3
 push constant 0
 return
 function Graphics.eraseSmallTriangleObstacle 3
+push argument 1
+push constant 0
+lt
+push argument 1
+push constant 16
+add
+push constant 239
+gt
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
 push argument 0
 pop local 0
 push constant 16
@@ -1138,35 +1198,35 @@ pop local 2
 push local 0
 push constant 0
 lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push local 1
 push local 0
 add
 pop local 1
 push constant 0
 pop local 0
-label IF_FALSE0
+label IF_FALSE1
 push local 0
 push local 1
 add
 push constant 511
 gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 511
 push local 0
 sub
 pop local 1
-label IF_FALSE1
+label IF_FALSE2
 push local 1
 push constant 0
 gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 call Screen.setColor 1
 pop temp 0
@@ -1208,7 +1268,7 @@ add
 push argument 1
 call Screen.drawLine 4
 pop temp 0
-label IF_FALSE2
+label IF_FALSE3
 push constant 0
 return
 function Graphics.drawSquareBox 4
@@ -3049,9 +3109,20 @@ label WHILE_END0
 push constant 0
 return
 function Graphics.groundLevel 0
-push constant 240
+push constant 239
 return
 function Graphics.drawCircle 0
+push argument 0
+push argument 1
+push argument 2
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+return
+function Graphics.eraseCircle 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
 push argument 0
 push argument 1
 push argument 2

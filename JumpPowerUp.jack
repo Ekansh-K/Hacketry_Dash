@@ -1,0 +1,80 @@
+// JumpPowerUp.jack
+class JumpPowerUp {
+    field int x, y, r, speed;
+    field boolean isVisible;
+
+    constructor JumpPowerUp new() {
+        let r = 5;
+        let speed = 4;
+        do reset();
+        return this;
+    }
+
+    method void reset() {
+        let x = 511 + Random.randRange(0,100);
+        let y = Graphics.groundLevel() - r - 4;
+        let isVisible = false;
+        return;
+    }
+
+    method void update() {
+        if (isVisible) { do erase(); }
+        let x = x - speed;
+        if ((x + r > 0) & (x < 512)) {
+            let isVisible = true;
+            do draw();
+        } else {
+            let isVisible = false;
+            if ((x + r) < 0) { do reset(); }
+        }
+        return;
+    }
+
+    method void draw() {
+        var int cx, cy;
+        let cx = x;
+        let cy = y;
+        // clamp center to stay on-screen for full radius
+        if (cx < r)          { let cx = r; }
+        if (cx > 511 - r)     { let cx = 511 - r; }
+        if (cy < r)          { let cy = r; }
+        if (cy > 239 - r)     { let cy = 239 - r; }
+        do Screen.setColor(true);
+        do Screen.drawCircle(cx, cy, r);
+        return;
+    }
+
+    method void erase() {
+        var int cx, cy;
+        let cx = x;
+        let cy = y;
+        // clamp center
+        if (cx < r)          { let cx = r; }
+        if (cx > 511 - r)     { let cx = 511 - r; }
+        if (cy < r)          { let cy = r; }
+        if (cy > 239 - r)     { let cy = 239 - r; }
+        do Screen.setColor(false);
+        do Screen.drawCircle(cx, cy, r);
+        return;
+    }
+
+    method boolean collidesWith(Player p) {
+        var int px, py, pw, ph;
+        if (isVisible) {
+            let px = p.collision_box_x();
+            let py = p.collision_box_y();
+            let pw = p.collision_box_width();
+            let ph = p.collision_box_height();
+            if (((px+pw) > (x-r)) & (px < (x+r))
+                & ((py+ph) > (y-r)) & (py < (y+r))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    method int getX()         { return x; }
+    method int getY()         { return y; }
+    method int getRadius()    { return r; }
+    method boolean isVisible(){ return isVisible; }
+}

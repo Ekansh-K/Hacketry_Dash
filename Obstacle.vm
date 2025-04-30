@@ -18,7 +18,7 @@ call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function Obstacle.update 0
+function Obstacle.update 1
 push argument 0
 pop pointer 0
 push this 5
@@ -44,33 +44,16 @@ pop this 6
 push this 1
 pop this 7
 push this 0
-push this 2
-neg
-gt
-push this 0
 push constant 512
 lt
-and
-push this 1
+push this 0
+push this 2
+add
 push constant 0
 gt
-push this 1
-push constant 0
-eq
-or
 and
-push this 1
-push this 3
-add
-push constant 240
-lt
-push this 1
-push this 3
-add
-push constant 240
-eq
-or
-and
+pop local 0
+push local 0
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
@@ -86,7 +69,8 @@ push constant 0
 pop this 5
 push this 0
 push this 2
-neg
+add
+push constant 0
 lt
 if-goto IF_TRUE2
 goto IF_FALSE2
@@ -321,6 +305,16 @@ push argument 0
 pop pointer 0
 push this 0
 return
+function Obstacle.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Obstacle.getHeight 0
+push argument 0
+pop pointer 0
+push this 3
+return
 function Obstacle.getWidth 0
 push argument 0
 pop pointer 0
@@ -357,4 +351,11 @@ function Obstacle.isVisible 0
 push argument 0
 pop pointer 0
 push this 5
+return
+function Obstacle.setY 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
 return

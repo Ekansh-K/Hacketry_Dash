@@ -69,6 +69,7 @@ class StartScreen {
         if (level = 3) { do Output.printString("Block Tester Level : "); }
         if (level = 4) { do Output.printString("Mixed Mayhem Level : "); }
         if (level = 1) { do Output.printString("Tutorial Level : "); }
+        if (level = 5) { do Output.printString("Power Frenzy Level : "); }
         do Output.printInt(level);
 
         do Output.moveCursor(7, 22);
@@ -80,7 +81,8 @@ class StartScreen {
         if (level = 3) { do Output.printString("Stand on squares and test your skill"); }
         if (level = 4) { do Output.printString("Press I to invert gravity (4s active,30s cooldown)"); }
         if (level = 1) { do Output.printString("Avoid the spikes and reach 1000 points"); }
-        
+        if (level = 5) { do Output.printString("Collect J for double jump, S for speed boost"); }
+
         // Wait for SPACE key
         let exit = false;
         while (~exit) {

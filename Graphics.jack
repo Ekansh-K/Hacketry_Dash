@@ -174,6 +174,8 @@ class Graphics {
     // Draw large triangle obstacle (32x32)
     function void drawTriangleObstacle(int x, int y) {
         var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 32) > 239)) { return; }
 
         let drawX = x;
         let drawWidth = 32;
@@ -201,6 +203,8 @@ class Graphics {
     // Erase large triangle obstacle (32x32)
     function void eraseTriangleObstacle(int x, int y) {
         var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 32) > 239)) { return; }
 
         let drawX = x;
         let drawWidth = 32;
@@ -228,6 +232,8 @@ class Graphics {
     // Draw small triangle obstacle (16x16)
     function void drawSmallTriangleObstacle(int x, int y) {
         var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 16) > 239)) { return; }
 
         let drawX = x;
         let drawWidth = 16;
@@ -255,6 +261,8 @@ class Graphics {
     // Erase small triangle obstacle (16x16)
     function void eraseSmallTriangleObstacle(int x, int y) {
         var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 16) > 239)) { return; }
 
         let drawX = x;
         let drawWidth = 16;
@@ -688,12 +696,19 @@ class Graphics {
 
     /** Returns the Y position of the ground level. */
     function int groundLevel() {
-        return 240;
+        // one pixel above bottom (0..239 valid)
+        return 239;
     }
     
     /** Draws a circle outline centered at (xc,yc) with radius r */
     function void drawCircle(int xc, int yc, int r) {
         // use built-in filled circle; radius must be <=181
+        do Screen.drawCircle(xc, yc, r);
+        return;
+    }
+    /** Erase a circle outline (power-up) at xc,yc with radius r */
+    function void eraseCircle(int xc, int yc, int r) {
+        do Screen.setColor(false);
         do Screen.drawCircle(xc, yc, r);
         return;
     }

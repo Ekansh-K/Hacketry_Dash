@@ -18,14 +18,26 @@ class GeometryDash {
     field SquareObstacle lvl4Sq1, lvl4Sq2, lvl4Sq3, lvl4Sq4;
     field int lvl4Type1, lvl4Type2, lvl4Type3, lvl4Type4;
     field int lvl4Count;
+    // Ceiling obstacles for Level 4
+    field Obstacle ceilObs1, ceilObs2, ceilObs3, ceilObs4;
+    field SquareObstacle ceilSq1, ceilSq2, ceilSq3, ceilSq4;
+    field int ceilType1, ceilType2, ceilType3, ceilType4;
+    field int ceilCount;
     field boolean gravityInverted;
     field int invertActiveTimer;  // frames remaining
     field int invertCooldownTimer; // frames until reuse
 
+    // Level 5: obstacle group and power-ups
+    field JumpPowerUp jumpPU;
+    field SpeedPowerUp speedPU;
+    field int jumpActiveTimer;
+    field int speedActiveTimer;
+
     /** Initialize game with high score and selected level */
     constructor GeometryDash new(int highestScore, int lvl) {
-        var int t, i;
-        var int prevX;
+        // local variables
+        var int level5Count, i, prevX, t, groundX, ceilX, idx, t2, j;
+        var Obstacle obs;
         let levelIndex = lvl;
         let isWin = false;
         // Initialize player at 100px from left, just above ground
@@ -39,13 +51,13 @@ class GeometryDash {
             do obstacle.setRandomMode(true);
             if (spawnCount > 1) {
                 let obstacle2 = Obstacle.new(); do obstacle2.setRandomMode(true);
-                do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 48);
+                do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 64);
                 if (spawnCount > 2) {
                     let obstacle3 = Obstacle.new(); do obstacle3.setRandomMode(true);
-                    do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 48);
+                    do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 64);
                     if (spawnCount > 3) {
                         let obstacle4 = Obstacle.new(); do obstacle4.setRandomMode(true);
-                        do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 48);
+                        do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 64);
                     }
                 }
             }
@@ -56,28 +68,68 @@ class GeometryDash {
         }
         // Level 4: mixed obstacles with spacing and gravity invert
         if (lvl = 4) {
+            // set count and timers
             let lvl4Count = Random.randRange(1, 4);
-            let prevX = 511;
-            let i = 1;
-            while ((i < lvl4Count)|(i = lvl4Count)) {
-                let t = Random.randRange(0, 1);
-                if (t = 0) {
-                    let lvl4Type1 = t; // triangle
-                    let lvl4Obs1 = Obstacle.new();
-                    do lvl4Obs1.setRandomMode(false);
-                    do lvl4Obs1.resetWithOffset(prevX + 64);
-                    let prevX = lvl4Obs1.getX() + lvl4Obs1.getWidth();
-                } else {
-                    let lvl4Type1 = t; // square
-                    let lvl4Sq1 = SquareObstacle.new();
-                    do lvl4Sq1.resetWithOffset(prevX + 64);
-                    let prevX = lvl4Sq1.getX() + lvl4Sq1.getSize();
-                }
-                let i = i + 1;
-            }
+            let ceilCount = lvl4Count;
             let gravityInverted = false;
             let invertActiveTimer = 0;
             let invertCooldownTimer = 0;
+            // spawn ground obstacles spaced 64px
+            let prevX = 511;
+            var int i;
+            let i = 1;
+            while ((i < lvl4Count) | (i = lvl4Count)) {
+                let t = Random.randRange(0, 1);
+                if (t = 0) {
+                    if (i = 1) { let lvl4Type1 = 0; let lvl4Obs1 = Obstacle.new(); do lvl4Obs1.setRandomMode(false); do lvl4Obs1.resetWithOffset(prevX + 64); let prevX = lvl4Obs1.getX() + lvl4Obs1.getWidth(); }
+                    if (i = 2) { let lvl4Type2 = 0; let lvl4Obs2 = Obstacle.new(); do lvl4Obs2.setRandomMode(false); do lvl4Obs2.resetWithOffset(prevX + 64); let prevX = lvl4Obs2.getX() + lvl4Obs2.getWidth(); }
+                    if (i = 3) { let lvl4Type3 = 0; let lvl4Obs3 = Obstacle.new(); do lvl4Obs3.setRandomMode(false); do lvl4Obs3.resetWithOffset(prevX + 64); let prevX = lvl4Obs3.getX() + lvl4Obs3.getWidth(); }
+                    if (i = 4) { let lvl4Type4 = 0; let lvl4Obs4 = Obstacle.new(); do lvl4Obs4.setRandomMode(false); do lvl4Obs4.resetWithOffset(prevX + 64); let prevX = lvl4Obs4.getX() + lvl4Obs4.getWidth(); }
+                } else {
+                    if (i = 1) { let lvl4Type1 = 1; let lvl4Sq1 = SquareObstacle.new(); do lvl4Sq1.resetWithOffset(prevX + 64); let prevX = lvl4Sq1.getX() + lvl4Sq1.getSize(); }
+                    if (i = 2) { let lvl4Type2 = 1; let lvl4Sq2 = SquareObstacle.new(); do lvl4Sq2.resetWithOffset(prevX + 64); let prevX = lvl4Sq2.getX() + lvl4Sq2.getSize(); }
+                    if (i = 3) { let lvl4Type3 = 1; let lvl4Sq3 = SquareObstacle.new(); do lvl4Sq3.resetWithOffset(prevX + 64); let prevX = lvl4Sq3.getX() + lvl4Sq3.getSize(); }
+                    if (i = 4) { let lvl4Type4 = 1; let lvl4Sq4 = SquareObstacle.new(); do lvl4Sq4.resetWithOffset(prevX + 64); let prevX = lvl4Sq4.getX() + lvl4Sq4.getSize(); }
+                }
+                let i = i + 1;
+            }
+            // spawn ceiling obstacles spaced for triangles (48px)
+            let ceilX = 511;
+            let j = 1;
+            while ((j < ceilCount) | (j = ceilCount)) {
+                let t2 = Random.randRange(0, 1);
+                if (t2 = 0) {
+                    if (j = 1) { let ceilType1 = 0; let ceilObs1 = Obstacle.new(); do ceilObs1.setRandomMode(false); do ceilObs1.resetWithOffset(ceilX + 48); do ceilObs1.setY(16); let ceilX = ceilObs1.getX() + ceilObs1.getWidth(); }
+                    if (j = 2) { let ceilType2 = 0; let ceilObs2 = Obstacle.new(); do ceilObs2.setRandomMode(false); do ceilObs2.resetWithOffset(ceilX + 48); do ceilObs2.setY(16); let ceilX = ceilObs2.getX() + ceilObs2.getWidth(); }
+                    if (j = 3) { let ceilType3 = 0; let ceilObs3 = Obstacle.new(); do ceilObs3.setRandomMode(false); do ceilObs3.resetWithOffset(ceilX + 48); do ceilObs3.setY(16); let ceilX = ceilObs3.getX() + ceilObs3.getWidth(); }
+                    if (j = 4) { let ceilType4 = 0; let ceilObs4 = Obstacle.new(); do ceilObs4.setRandomMode(false); do ceilObs4.resetWithOffset(ceilX + 48); do ceilObs4.setY(16); let ceilX = ceilObs4.getX() + ceilObs4.getWidth(); }
+                } else {
+                    if (j = 1) { let ceilType1 = 1; let ceilSq1 = SquareObstacle.new(); do ceilSq1.resetWithOffset(ceilX); do ceilSq1.setY(16); let ceilX = ceilSq1.getX() + ceilSq1.getSize(); }
+                    if (j = 2) { let ceilType2 = 1; let ceilSq2 = SquareObstacle.new(); do ceilSq2.resetWithOffset(ceilX); do ceilSq2.setY(16); let ceilX = ceilSq2.getX() + ceilSq2.getSize(); }
+                    if (j = 3) { let ceilType3 = 1; let ceilSq3 = SquareObstacle.new(); do ceilSq3.resetWithOffset(ceilX); do ceilSq3.setY(16); let ceilX = ceilSq3.getX() + ceilSq3.getSize(); }
+                    if (j = 4) { let ceilType4 = 1; let ceilSq4 = SquareObstacle.new(); do ceilSq4.resetWithOffset(ceilX); do ceilSq4.setY(16); let ceilX = ceilSq4.getX() + ceilSq4.getSize(); }
+                }
+                let j = j + 1;
+            }
+        }
+        // Level 5: obstacle group + power-ups
+        if (lvl = 5) {
+            let spawnCount = Random.randRange(1, 4);
+            // spawn obstacle group with 60px separation
+            do obstacle.setRandomMode(true);
+            if (spawnCount > 1) { let obstacle2 = Obstacle.new(); do obstacle2.setRandomMode(true); }
+            if (spawnCount > 2) { let obstacle3 = Obstacle.new(); do obstacle3.setRandomMode(true); }
+            if (spawnCount > 3) { let obstacle4 = Obstacle.new(); do obstacle4.setRandomMode(true); }
+            // initial positions
+            do obstacle.resetWithOffset(511);
+            if (spawnCount > 1) { do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 60); }
+            if (spawnCount > 2) { do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 60); }
+            if (spawnCount > 3) { do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 60); }
+            // scatter power-ups at ground
+            let jumpPU           = JumpPowerUp.new();
+            let speedPU          = SpeedPowerUp.new();
+            let jumpActiveTimer  = 0;
+            let speedActiveTimer = 0;
         }
 
         // Game settings
@@ -100,79 +152,143 @@ class GeometryDash {
     }
 
     method int run() {
+        // local variables
         var boolean crashed;
-        var int py, ph;
-        var int key;
+        var int key, py, ph;
         let crashed = false;
+
+        if (levelIndex = 5) {
+            while (~crashed) {
+                // player input and update
+                let key = Keyboard.keyPressed();
+                if (key = 32) {
+                    if (jumpActiveTimer > 0) { do player.jumpDouble(); }
+                    else                    { do player.jump(); }
+                }
+                do player.update();
+
+                // update obstacles and recycle with 60px spacing
+                do obstacle.update();
+                if (spawnCount > 1) {
+                    do obstacle2.update();
+                    if (obstacle2.getX() < -obstacle2.getWidth()) {
+                        do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 64);
+                    }
+                }
+                if (spawnCount > 2) {
+                    do obstacle3.update();
+                    if (obstacle3.getX() < -obstacle3.getWidth()) {
+                        do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 64);
+                    }
+                }
+                if (spawnCount > 3) {
+                    do obstacle4.update();
+                    if (obstacle4.getX() < -obstacle4.getWidth()) {
+                        do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 64);
+                    }
+                }
+
+                // update and collect jump power-up
+                do jumpPU.update();
+                if (jumpPU.collidesWith(player)) {
+                    if (jumpActiveTimer = 0) {
+                        let jumpActiveTimer = (5000 / delay);
+                        do jumpPU.reset();
+                    }
+                }
+                // update and collect speed power-up
+                do speedPU.update();
+                if (speedPU.collidesWith(player)) {
+                    if (speedActiveTimer = 0) {
+                        let speedActiveTimer = (5000 / delay);
+                        do speedPU.reset();
+                    }
+                }
+
+                // decrement timers
+                if (jumpActiveTimer > 0) { let jumpActiveTimer = jumpActiveTimer - 1; }
+                if (speedActiveTimer > 0){ let speedActiveTimer = speedActiveTimer - 1; }
+
+                // frame delay with speed boost
+                if (speedActiveTimer > 0) { do Sys.wait(delay / 2); } else { do Sys.wait(delay); }
+
+                // score increment
+                let score = score + 1;
+                do Output.moveCursor(0, 7);
+                do Output.printInt(score);
+            }
+            return score;
+        }
         if (levelIndex = 4) {
             while (~crashed) {
                 // Input: jump or invert gravity
                 let key = Keyboard.keyPressed();
-                if (key = 32) { do player.jump(); }
+                if (key = 32) {
+                    if (gravityInverted) { do player.jumpInverted(); } else { do player.jump(); }
+                }
                 if ((key = 73) & (invertCooldownTimer = 0)) {
                     let gravityInverted = true;
-                    let invertActiveTimer = (4000 / delay);
-                    let invertCooldownTimer = (30000 / delay);
+                    let invertActiveTimer = (8000 / delay);
+                    let invertCooldownTimer = (20000 / delay);
                 }
-                // timers
-                if (invertActiveTimer > 0) {
-                    let invertActiveTimer = invertActiveTimer - 1;
-                } else {
-                    let gravityInverted = false;
-                }
-                if (invertCooldownTimer > 0) {
-                    let invertCooldownTimer = invertCooldownTimer - 1;
-                }
+                // update timers
+                if (invertActiveTimer > 0) { let invertActiveTimer = invertActiveTimer - 1; } else { let gravityInverted = false; }
+                if (invertCooldownTimer > 0) { let invertCooldownTimer = invertCooldownTimer - 1; }
                 // update player
                 if (gravityInverted) { do player.updateInverted(); } else { do player.update(); }
-                // update and handle collisions for each mixed obstacle
-                if ((lvl4Count = 1)|(lvl4Count > 1)) {
-                    if (lvl4Type1 = 0) {
-                        do lvl4Obs1.update();
-                        if (lvl4Obs1.collidesWith(player)) { let crashed = true; }
-                    } else {
-                        do lvl4Sq1.update();
-                        if (lvl4Sq1.collidesWith(player)) {
-                            let py = player.collision_box_y();
-                            let ph = player.collision_box_height();
-                            if ((py + ph) < (lvl4Sq1.getY() + 8)) {
-                                do player.land(lvl4Sq1.getY());
-                            } else { let crashed = true; }
-                        }
-                    }
+                // update ground obstacles
+                if (lvl4Type1 = 0) { do lvl4Obs1.update(); } else { do lvl4Sq1.update(); }
+                if ((lvl4Count = 2) | (lvl4Count = 3) | (lvl4Count = 4)) {
+                    if (lvl4Type2 = 0) { do lvl4Obs2.update(); } else { do lvl4Sq2.update(); }
                 }
-                if ((lvl4Count > 2)|(lvl4Count = 2)) {
-                    if (lvl4Type2 = 0) {
-                        do lvl4Obs2.update(); if (lvl4Obs2.collidesWith(player)) { let crashed = true; }
-                    } else {
-                        do lvl4Sq2.update();
-                        if (lvl4Sq2.collidesWith(player)) {
-                            let py = player.collision_box_y(); let ph = player.collision_box_height();
-                            if ((py + ph) < (lvl4Sq2.getY() + 8)) { do player.land(lvl4Sq2.getY()); } else { let crashed = true; }
-                        }
-                    }
+                if ((lvl4Count = 3) | (lvl4Count = 4)) {
+                    if (lvl4Type3 = 0) { do lvl4Obs3.update(); } else { do lvl4Sq3.update(); }
                 }
-                if ((lvl4Count = 3)|(lvl4Count > 3)) {
-                    if (lvl4Type3 = 0) {
-                        do lvl4Obs3.update(); if (lvl4Obs3.collidesWith(player)) { let crashed = true; }
-                    } else {
-                        do lvl4Sq3.update();
-                        if (lvl4Sq3.collidesWith(player)) {
-                            let py = player.collision_box_y(); let ph = player.collision_box_height();
-                            if ((py + ph) < (lvl4Sq3.getY() + 8)) { do player.land(lvl4Sq3.getY()); } else { let crashed = true; }
-                        }
-                    }
+                if (lvl4Count = 4) {
+                    if (lvl4Type4 = 0) { do lvl4Obs4.update(); } else { do lvl4Sq4.update(); }
                 }
-                if ((lvl4Count > 4)|(lvl4Count = 4)) {
-                    if (lvl4Type4 = 0) {
-                        do lvl4Obs4.update(); if (lvl4Obs4.collidesWith(player)) { let crashed = true; }
-                    } else {
-                        do lvl4Sq4.update();
-                        if (lvl4Sq4.collidesWith(player)) {
-                            let py = player.collision_box_y(); let ph = player.collision_box_height();
-                            if ((py + ph) < (lvl4Sq4.getY() + 8)) { do player.land(lvl4Sq4.getY()); } else { let crashed = true; }
-                        }
-                    }
+                // update ceiling obstacles
+                if (ceilType1 = 0) { do ceilObs1.update(); } else { do ceilSq1.update(); }
+                if ((ceilCount = 2) | (ceilCount = 3) | (ceilCount = 4)) {
+                    if (ceilType2 = 0) { do ceilObs2.update(); } else { do ceilSq2.update(); }
+                }
+                if ((ceilCount = 3) | (ceilCount = 4)) {
+                    if (ceilType3 = 0) { do ceilObs3.update(); } else { do ceilSq3.update(); }
+                }
+                if (ceilCount = 4) {
+                    if (ceilType4 = 0) { do ceilObs4.update(); } else { do ceilSq4.update(); }
+                }
+                // handle collisions: ground
+                if (lvl4Type1 = 0) { if (lvl4Obs1.collidesWith(player)) { do player.land(lvl4Obs1.getY()); } }
+                else { if (lvl4Sq1.collidesWith(player)) { do player.land(lvl4Sq1.getY()); } }
+                // ground extras
+                if ((lvl4Count = 2) | (lvl4Count = 3) | (lvl4Count = 4)) {
+                    if (lvl4Type2 = 0) { if (lvl4Obs2.collidesWith(player)) { do player.land(lvl4Obs2.getY()); } }
+                    else { if (lvl4Sq2.collidesWith(player)) { do player.land(lvl4Sq2.getY()); } }
+                }
+                if ((lvl4Count = 3) | (lvl4Count = 4)) {
+                    if (lvl4Type3 = 0) { if (lvl4Obs3.collidesWith(player)) { do player.land(lvl4Obs3.getY()); } }
+                    else { if (lvl4Sq3.collidesWith(player)) { do player.land(lvl4Sq3.getY()); } }
+                }
+                if (lvl4Count = 4) {
+                    if (lvl4Type4 = 0) { if (lvl4Obs4.collidesWith(player)) { do player.land(lvl4Obs4.getY()); } }
+                    else { if (lvl4Sq4.collidesWith(player)) { do player.land(lvl4Sq4.getY()); } }
+                }
+                // handle collisions: ceiling
+                if (ceilType1 = 0) { if (ceilObs1.collidesWith(player)) { do player.land(16); } }
+                else { if (ceilSq1.collidesWith(player)) { do player.land(16); } }
+                // ceiling extras
+                if ((ceilCount = 2) | (ceilCount = 3) | (ceilCount = 4)) {
+                    if (ceilType2 = 0) { if (ceilObs2.collidesWith(player)) { do player.land(16); } }
+                    else { if (ceilSq2.collidesWith(player)) { do player.land(16); } }
+                }
+                if ((ceilCount = 3) | (ceilCount = 4)) {
+                    if (ceilType3 = 0) { if (ceilObs3.collidesWith(player)) { do player.land(16); } }
+                    else { if (ceilSq3.collidesWith(player)) { do player.land(16); } }
+                }
+                if (ceilCount = 4) {
+                    if (ceilType4 = 0) { if (ceilObs4.collidesWith(player)) { do player.land(16); } }
+                    else { if (ceilSq4.collidesWith(player)) { do player.land(16); } }
                 }
                 // advance frame and score
                 do Sys.wait(delay);
@@ -216,31 +332,30 @@ class GeometryDash {
             return score;
         }
         if (levelIndex = 2) {
-            // Level 2: random obstacles, time-based survival
             while (~crashed) {
                 if (checkInput()) {
                     do player.update();
                     // update and reset chain of obstacles
                     do obstacle.update();
-                    if (spawnCount > 1) { do obstacle2.update(); }
-                    if (spawnCount > 2) { do obstacle3.update(); }
-                    if (spawnCount > 3) { do obstacle4.update(); }
+                    if ((spawnCount = 2) | (spawnCount = 3) | (spawnCount = 4)) { do obstacle2.update(); }
+                    if ((spawnCount = 3) | (spawnCount = 4)) { do obstacle3.update(); }
+                    if (spawnCount = 4) { do obstacle4.update(); }
 
                     // reset on off-screen
                     if (obstacle.getX() < -obstacle.getWidth()) {
                         do obstacle.resetWithOffset(511);
                     }
-                    if (spawnCount > 1) {
+                    if ((spawnCount = 2) | (spawnCount = 3) | (spawnCount = 4)) {
                         if (obstacle2.getX() < -obstacle2.getWidth()) {
                             do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 48);
                         }
                     }
-                    if (spawnCount > 2) {
+                    if ((spawnCount = 3) | (spawnCount = 4)) {
                         if (obstacle3.getX() < -obstacle3.getWidth()) {
                             do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 48);
                         }
                     }
-                    if (spawnCount > 3) {
+                    if (spawnCount = 4) {
                         if (obstacle4.getX() < -obstacle4.getWidth()) {
                             do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 48);
                         }
@@ -251,18 +366,18 @@ class GeometryDash {
                         let crashed = true;
                     } else {
                         // then obstacle2 if exists
-                        if (spawnCount > 1) {
+                        if ((spawnCount = 2) | (spawnCount = 3) | (spawnCount = 4)) {
                             if (obstacle2.collidesWith(player)) {
                                 let crashed = true;
                                 // skip scoring
                             } else {
                                 // obstacle3
-                                if (spawnCount > 2) {
+                                if ((spawnCount = 3) | (spawnCount = 4)) {
                                     if (obstacle3.collidesWith(player)) {
                                         let crashed = true;
                                     } else {
                                         // obstacle4
-                                        if (spawnCount > 3) {
+                                        if (spawnCount = 4) {
                                             if (obstacle4.collidesWith(player)) {
                                                 let crashed = true;
                                             } else {
@@ -300,8 +415,8 @@ class GeometryDash {
             }
             return score;
         }
-        // run until crash or win
-        while ((~crashed) & (~isWin)) {
+        // Main loop
+        while (~crashed & ~isWin) {
             if (checkInput()) {
                 do player.update();
                 do obstacle.update();

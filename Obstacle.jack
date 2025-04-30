@@ -18,22 +18,23 @@ class Obstacle {
     }
 
     method void update() {
-        // update position and visibility safely
+        var boolean onScreen;
+        // erase previous draw if visible
         if (isVisible) { do erase(); }
+        // move obstacle horizontally
         let x = x - speed;
-        // center hitbox under sprite horizontally
+        // recalc hitbox position under sprite
         let hitboxX = x + ((width - hitboxWidth) / 2);
         let hitboxY = y;
-        // only draw if within screen X and Y bounds (replace >= and <=)
-        if ((x > -width) & (x < 512)
-            & ((y > 0) | (y = 0))
-            & (((y + height) < 240) | ((y + height) = 240))) {
+        // check if any part of obstacle inside screen X range
+        let onScreen = (x < 512) & ((x + width) > 0);
+        if (onScreen) {
             let isVisible = true;
             do draw();
         } else {
-         let isVisible = false;
-         // reset when fully off left edge
-         if (x < -width) { do reset(); }
+            let isVisible = false;
+            // respawn only when fully off left edge
+            if ((x + width) < 0) { do reset(); }
         }
         return;
     }
@@ -123,6 +124,15 @@ class Obstacle {
     method int getX() {
         return x;
     }
+    /** Get current spawn Y of obstacle */
+    method int getY() {
+        return y;
+    }
+    /** Get obstacle height */
+    method int getHeight() {
+        return height;
+    }
+    /** Get obstacle width */
     method int getWidth() {
         return width;
     }
@@ -138,5 +148,9 @@ class Obstacle {
     }
     method boolean isVisible() {
         return isVisible;
+    }
+    method void setY(int newY) {
+        let y = newY;
+        return;
     }
 }

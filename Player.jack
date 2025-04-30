@@ -109,9 +109,9 @@ class Player {
         do erase();
         // Apply inverted gravity
         let y = y + yVelocity;
-        // Check collision with ceiling (y=0)
-        if (y < 0) {
-            let y = 0;
+        // Check collision with ceiling (y=16)
+        if (y < 16) {
+            let y = 16;
             let yVelocity = 0;
             let isOnGround = true;
         } else {
@@ -122,5 +122,32 @@ class Player {
         }
         do draw();
         return;
+    }
+
+    method boolean jumpDouble() {
+        if (isOnGround) {
+            let yVelocity = -24;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
+    }
+
+    method boolean jumpInverted() {
+        if (isOnGround) {
+            let yVelocity = 12;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
+    }
+
+    method boolean jumpDoubleInverted() {
+        if (isOnGround) {
+            let yVelocity = 24;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
     }
 }

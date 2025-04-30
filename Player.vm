@@ -191,12 +191,12 @@ push this 4
 add
 pop this 1
 push this 1
-push constant 0
+push constant 16
 lt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push constant 0
+push constant 16
 pop this 1
 push constant 0
 pop this 4
@@ -226,5 +226,57 @@ label IF_END0
 push pointer 0
 call Player.draw 1
 pop temp 0
+push constant 0
+return
+function Player.jumpDouble 0
+push argument 0
+pop pointer 0
+push this 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 24
+neg
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Player.jumpInverted 0
+push argument 0
+pop pointer 0
+push this 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 12
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Player.jumpDoubleInverted 0
+push argument 0
+pop pointer 0
+push this 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 24
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+not
+return
+label IF_FALSE0
 push constant 0
 return

@@ -101,6 +101,11 @@ class SquareObstacle {
     method boolean isVisible() {
         return isVisible;
     }
+    /** Sets the Y coordinate of the square obstacle */
+    method void setY(int newY) {
+        let y = newY;
+        return;
+    }
 
     method void dispose() {
         do erase();
