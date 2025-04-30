@@ -1,0 +1,62 @@
+/** Main for Geometry Dash */
+class Main {
+    function void main() {
+        var int level;
+        var int score;
+        var int highScore;
+        var boolean playAgain;
+        var boolean won;
+        var GeometryDash game;
+        var EndScreen endScreen;
+        var int seed;
+
+        do Graphics.init();
+
+        let seed = StartScreen.run();
+        // seed randomness
+        do Random.setSeed(seed);
+
+        // initial high score
+        let highScore = 0;
+
+        // show level selection menu
+        let level = Menu.run();
+
+        // show level start
+        do StartScreen.showLevelStart(level);
+
+        // game loop
+        let playAgain = true;
+        while (playAgain) {
+            // start game for selected level
+            let game = GeometryDash.new(highScore, level);
+            let score = game.run();
+            let won = game.hasWon();
+            do game.dispose();
+
+            // update high score
+            if (score > highScore) { let highScore = score; }
+
+            // show end screen based on win or crash
+            let endScreen = EndScreen.new();
+            if (won) {
+                let playAgain = endScreen.win(score, highScore);
+            } else {
+                let playAgain = endScreen.crash(score, highScore);
+            }
+            do endScreen.dispose();
+
+            if (~playAgain) { 
+                return; 
+            }
+
+            // otherwise, show level selection menu again
+            let level = Menu.run();
+
+            // show level start
+            do StartScreen.showLevelStart(level);
+        }
+
+        return;
+    }
+}

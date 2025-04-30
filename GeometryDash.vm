@@ -1,0 +1,1205 @@
+function GeometryDash.new 3
+push constant 29
+call Memory.alloc 1
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
+pop this 12
+push constant 100
+push constant 240
+push constant 32
+sub
+call Player.new 2
+pop this 2
+call Obstacle.new 0
+pop this 3
+push argument 1
+push constant 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 1
+push constant 4
+call Random.randRange 2
+pop this 8
+push this 3
+push constant 0
+not
+call Obstacle.setRandomMode 2
+pop temp 0
+push this 8
+push constant 1
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+call Obstacle.new 0
+pop this 4
+push this 4
+push constant 0
+not
+call Obstacle.setRandomMode 2
+pop temp 0
+push this 4
+push this 3
+call Obstacle.getX 1
+push this 3
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+push this 8
+push constant 2
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+call Obstacle.new 0
+pop this 5
+push this 5
+push constant 0
+not
+call Obstacle.setRandomMode 2
+pop temp 0
+push this 5
+push this 4
+call Obstacle.getX 1
+push this 4
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+push this 8
+push constant 3
+gt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+call Obstacle.new 0
+pop this 6
+push this 6
+push constant 0
+not
+call Obstacle.setRandomMode 2
+pop temp 0
+push this 6
+push this 5
+call Obstacle.getX 1
+push this 5
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+label IF_FALSE3
+label IF_FALSE2
+label IF_FALSE1
+label IF_FALSE0
+push argument 1
+push constant 3
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+call SquareObstacle.new 0
+pop this 7
+label IF_FALSE4
+push argument 1
+push constant 4
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 1
+push constant 4
+call Random.randRange 2
+pop this 25
+push constant 511
+pop local 2
+push constant 1
+pop local 1
+label WHILE_EXP0
+push local 1
+push this 25
+lt
+push local 1
+push this 25
+eq
+or
+not
+if-goto WHILE_END0
+push constant 0
+push constant 1
+call Random.randRange 2
+pop local 0
+push local 0
+push constant 0
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push local 0
+pop this 21
+call Obstacle.new 0
+pop this 13
+push this 13
+push constant 0
+call Obstacle.setRandomMode 2
+pop temp 0
+push this 13
+push local 2
+push constant 64
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+push this 13
+call Obstacle.getX 1
+push this 13
+call Obstacle.getWidth 1
+add
+pop local 2
+goto IF_END6
+label IF_FALSE6
+push local 0
+pop this 21
+call SquareObstacle.new 0
+pop this 17
+push this 17
+push local 2
+push constant 64
+add
+call SquareObstacle.resetWithOffset 2
+pop temp 0
+push this 17
+call SquareObstacle.getX 1
+push this 17
+call SquareObstacle.getSize 1
+add
+pop local 2
+label IF_END6
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop this 26
+push constant 0
+pop this 27
+push constant 0
+pop this 28
+label IF_FALSE5
+push constant 18
+pop this 0
+push constant 0
+pop this 9
+push constant 0
+pop this 10
+push argument 0
+pop this 11
+call Screen.clearScreen 0
+pop temp 0
+push constant 0
+push constant 0
+call Output.moveCursor 2
+pop temp 0
+push constant 7
+call String.new 1
+push constant 83
+call String.appendChar 2
+push constant 99
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+call Output.printString 1
+pop temp 0
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+call Graphics.drawGround 0
+pop temp 0
+push pointer 0
+return
+function GeometryDash.run 4
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push this 1
+push constant 4
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+label WHILE_EXP0
+push local 0
+not
+not
+if-goto WHILE_END0
+call Keyboard.keyPressed 0
+pop local 3
+push local 3
+push constant 32
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 2
+call Player.jump 1
+pop temp 0
+label IF_FALSE1
+push local 3
+push constant 73
+eq
+push this 28
+push constant 0
+eq
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+pop this 26
+push constant 4000
+push this 0
+call Math.divide 2
+pop this 27
+push constant 30000
+push this 0
+call Math.divide 2
+pop this 28
+label IF_FALSE2
+push this 27
+push constant 0
+gt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 27
+push constant 1
+sub
+pop this 27
+goto IF_END3
+label IF_FALSE3
+push constant 0
+pop this 26
+label IF_END3
+push this 28
+push constant 0
+gt
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 28
+push constant 1
+sub
+pop this 28
+label IF_FALSE4
+push this 26
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 2
+call Player.updateInverted 1
+pop temp 0
+goto IF_END5
+label IF_FALSE5
+push this 2
+call Player.update 1
+pop temp 0
+label IF_END5
+push this 25
+push constant 1
+eq
+push this 25
+push constant 1
+gt
+or
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push this 21
+push constant 0
+eq
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push this 13
+call Obstacle.update 1
+pop temp 0
+push this 13
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 0
+not
+pop local 0
+label IF_FALSE8
+goto IF_END7
+label IF_FALSE7
+push this 17
+call SquareObstacle.update 1
+pop temp 0
+push this 17
+push this 2
+call SquareObstacle.collidesWith 2
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push this 2
+call Player.collision_box_y 1
+pop local 1
+push this 2
+call Player.collision_box_height 1
+pop local 2
+push local 1
+push local 2
+add
+push this 17
+call SquareObstacle.getY 1
+push constant 8
+add
+lt
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
+push this 2
+push this 17
+call SquareObstacle.getY 1
+call Player.land 2
+pop temp 0
+goto IF_END10
+label IF_FALSE10
+push constant 0
+not
+pop local 0
+label IF_END10
+label IF_FALSE9
+label IF_END7
+label IF_FALSE6
+push this 25
+push constant 2
+gt
+push this 25
+push constant 2
+eq
+or
+if-goto IF_TRUE11
+goto IF_FALSE11
+label IF_TRUE11
+push this 22
+push constant 0
+eq
+if-goto IF_TRUE12
+goto IF_FALSE12
+label IF_TRUE12
+push this 14
+call Obstacle.update 1
+pop temp 0
+push this 14
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE13
+goto IF_FALSE13
+label IF_TRUE13
+push constant 0
+not
+pop local 0
+label IF_FALSE13
+goto IF_END12
+label IF_FALSE12
+push this 18
+call SquareObstacle.update 1
+pop temp 0
+push this 18
+push this 2
+call SquareObstacle.collidesWith 2
+if-goto IF_TRUE14
+goto IF_FALSE14
+label IF_TRUE14
+push this 2
+call Player.collision_box_y 1
+pop local 1
+push this 2
+call Player.collision_box_height 1
+pop local 2
+push local 1
+push local 2
+add
+push this 18
+call SquareObstacle.getY 1
+push constant 8
+add
+lt
+if-goto IF_TRUE15
+goto IF_FALSE15
+label IF_TRUE15
+push this 2
+push this 18
+call SquareObstacle.getY 1
+call Player.land 2
+pop temp 0
+goto IF_END15
+label IF_FALSE15
+push constant 0
+not
+pop local 0
+label IF_END15
+label IF_FALSE14
+label IF_END12
+label IF_FALSE11
+push this 25
+push constant 3
+eq
+push this 25
+push constant 3
+gt
+or
+if-goto IF_TRUE16
+goto IF_FALSE16
+label IF_TRUE16
+push this 23
+push constant 0
+eq
+if-goto IF_TRUE17
+goto IF_FALSE17
+label IF_TRUE17
+push this 15
+call Obstacle.update 1
+pop temp 0
+push this 15
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE18
+goto IF_FALSE18
+label IF_TRUE18
+push constant 0
+not
+pop local 0
+label IF_FALSE18
+goto IF_END17
+label IF_FALSE17
+push this 19
+call SquareObstacle.update 1
+pop temp 0
+push this 19
+push this 2
+call SquareObstacle.collidesWith 2
+if-goto IF_TRUE19
+goto IF_FALSE19
+label IF_TRUE19
+push this 2
+call Player.collision_box_y 1
+pop local 1
+push this 2
+call Player.collision_box_height 1
+pop local 2
+push local 1
+push local 2
+add
+push this 19
+call SquareObstacle.getY 1
+push constant 8
+add
+lt
+if-goto IF_TRUE20
+goto IF_FALSE20
+label IF_TRUE20
+push this 2
+push this 19
+call SquareObstacle.getY 1
+call Player.land 2
+pop temp 0
+goto IF_END20
+label IF_FALSE20
+push constant 0
+not
+pop local 0
+label IF_END20
+label IF_FALSE19
+label IF_END17
+label IF_FALSE16
+push this 25
+push constant 4
+gt
+push this 25
+push constant 4
+eq
+or
+if-goto IF_TRUE21
+goto IF_FALSE21
+label IF_TRUE21
+push this 24
+push constant 0
+eq
+if-goto IF_TRUE22
+goto IF_FALSE22
+label IF_TRUE22
+push this 16
+call Obstacle.update 1
+pop temp 0
+push this 16
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE23
+goto IF_FALSE23
+label IF_TRUE23
+push constant 0
+not
+pop local 0
+label IF_FALSE23
+goto IF_END22
+label IF_FALSE22
+push this 20
+call SquareObstacle.update 1
+pop temp 0
+push this 20
+push this 2
+call SquareObstacle.collidesWith 2
+if-goto IF_TRUE24
+goto IF_FALSE24
+label IF_TRUE24
+push this 2
+call Player.collision_box_y 1
+pop local 1
+push this 2
+call Player.collision_box_height 1
+pop local 2
+push local 1
+push local 2
+add
+push this 20
+call SquareObstacle.getY 1
+push constant 8
+add
+lt
+if-goto IF_TRUE25
+goto IF_FALSE25
+label IF_TRUE25
+push this 2
+push this 20
+call SquareObstacle.getY 1
+call Player.land 2
+pop temp 0
+goto IF_END25
+label IF_FALSE25
+push constant 0
+not
+pop local 0
+label IF_END25
+label IF_FALSE24
+label IF_END22
+label IF_FALSE21
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 10
+return
+label IF_FALSE0
+push this 1
+push constant 3
+eq
+if-goto IF_TRUE26
+goto IF_FALSE26
+label IF_TRUE26
+label WHILE_EXP1
+push local 0
+not
+not
+if-goto WHILE_END1
+push pointer 0
+call GeometryDash.checkInput 1
+if-goto IF_TRUE27
+goto IF_FALSE27
+label IF_TRUE27
+push this 2
+call Player.update 1
+pop temp 0
+push this 7
+call SquareObstacle.update 1
+pop temp 0
+push this 7
+call SquareObstacle.isVisible 1
+if-goto IF_TRUE28
+goto IF_FALSE28
+label IF_TRUE28
+push this 7
+call SquareObstacle.getX 1
+push this 7
+call SquareObstacle.getSize 1
+neg
+lt
+if-goto IF_TRUE29
+goto IF_FALSE29
+label IF_TRUE29
+push this 7
+call SquareObstacle.reset 1
+pop temp 0
+label IF_FALSE29
+push this 7
+push this 2
+call SquareObstacle.collidesWith 2
+if-goto IF_TRUE30
+goto IF_FALSE30
+label IF_TRUE30
+push this 2
+call Player.collision_box_y 1
+pop local 1
+push this 2
+call Player.collision_box_height 1
+pop local 2
+push local 1
+push local 2
+add
+push this 7
+call SquareObstacle.getY 1
+push constant 8
+add
+lt
+if-goto IF_TRUE31
+goto IF_FALSE31
+label IF_TRUE31
+push this 2
+push this 7
+call SquareObstacle.getY 1
+call Player.land 2
+pop temp 0
+goto IF_END31
+label IF_FALSE31
+push constant 0
+not
+pop local 0
+label IF_END31
+label IF_FALSE30
+label IF_FALSE28
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+goto IF_END27
+label IF_FALSE27
+push constant 0
+return
+label IF_END27
+goto WHILE_EXP1
+label WHILE_END1
+push this 10
+return
+label IF_FALSE26
+push this 1
+push constant 2
+eq
+if-goto IF_TRUE32
+goto IF_FALSE32
+label IF_TRUE32
+label WHILE_EXP2
+push local 0
+not
+not
+if-goto WHILE_END2
+push pointer 0
+call GeometryDash.checkInput 1
+if-goto IF_TRUE33
+goto IF_FALSE33
+label IF_TRUE33
+push this 2
+call Player.update 1
+pop temp 0
+push this 3
+call Obstacle.update 1
+pop temp 0
+push this 8
+push constant 1
+gt
+if-goto IF_TRUE34
+goto IF_FALSE34
+label IF_TRUE34
+push this 4
+call Obstacle.update 1
+pop temp 0
+label IF_FALSE34
+push this 8
+push constant 2
+gt
+if-goto IF_TRUE35
+goto IF_FALSE35
+label IF_TRUE35
+push this 5
+call Obstacle.update 1
+pop temp 0
+label IF_FALSE35
+push this 8
+push constant 3
+gt
+if-goto IF_TRUE36
+goto IF_FALSE36
+label IF_TRUE36
+push this 6
+call Obstacle.update 1
+pop temp 0
+label IF_FALSE36
+push this 3
+call Obstacle.getX 1
+push this 3
+call Obstacle.getWidth 1
+neg
+lt
+if-goto IF_TRUE37
+goto IF_FALSE37
+label IF_TRUE37
+push this 3
+push constant 511
+call Obstacle.resetWithOffset 2
+pop temp 0
+label IF_FALSE37
+push this 8
+push constant 1
+gt
+if-goto IF_TRUE38
+goto IF_FALSE38
+label IF_TRUE38
+push this 4
+call Obstacle.getX 1
+push this 4
+call Obstacle.getWidth 1
+neg
+lt
+if-goto IF_TRUE39
+goto IF_FALSE39
+label IF_TRUE39
+push this 4
+push this 3
+call Obstacle.getX 1
+push this 3
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+label IF_FALSE39
+label IF_FALSE38
+push this 8
+push constant 2
+gt
+if-goto IF_TRUE40
+goto IF_FALSE40
+label IF_TRUE40
+push this 5
+call Obstacle.getX 1
+push this 5
+call Obstacle.getWidth 1
+neg
+lt
+if-goto IF_TRUE41
+goto IF_FALSE41
+label IF_TRUE41
+push this 5
+push this 4
+call Obstacle.getX 1
+push this 4
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+label IF_FALSE41
+label IF_FALSE40
+push this 8
+push constant 3
+gt
+if-goto IF_TRUE42
+goto IF_FALSE42
+label IF_TRUE42
+push this 6
+call Obstacle.getX 1
+push this 6
+call Obstacle.getWidth 1
+neg
+lt
+if-goto IF_TRUE43
+goto IF_FALSE43
+label IF_TRUE43
+push this 6
+push this 5
+call Obstacle.getX 1
+push this 5
+call Obstacle.getWidth 1
+add
+push constant 48
+add
+call Obstacle.resetWithOffset 2
+pop temp 0
+label IF_FALSE43
+label IF_FALSE42
+push this 3
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE44
+goto IF_FALSE44
+label IF_TRUE44
+push constant 0
+not
+pop local 0
+goto IF_END44
+label IF_FALSE44
+push this 8
+push constant 1
+gt
+if-goto IF_TRUE45
+goto IF_FALSE45
+label IF_TRUE45
+push this 4
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE46
+goto IF_FALSE46
+label IF_TRUE46
+push constant 0
+not
+pop local 0
+goto IF_END46
+label IF_FALSE46
+push this 8
+push constant 2
+gt
+if-goto IF_TRUE47
+goto IF_FALSE47
+label IF_TRUE47
+push this 5
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE48
+goto IF_FALSE48
+label IF_TRUE48
+push constant 0
+not
+pop local 0
+goto IF_END48
+label IF_FALSE48
+push this 8
+push constant 3
+gt
+if-goto IF_TRUE49
+goto IF_FALSE49
+label IF_TRUE49
+push this 6
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE50
+goto IF_FALSE50
+label IF_TRUE50
+push constant 0
+not
+pop local 0
+goto IF_END50
+label IF_FALSE50
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+label IF_END50
+goto IF_END49
+label IF_FALSE49
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+label IF_END49
+label IF_END48
+goto IF_END47
+label IF_FALSE47
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+label IF_END47
+label IF_END46
+goto IF_END45
+label IF_FALSE45
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+label IF_END45
+label IF_END44
+goto IF_END33
+label IF_FALSE33
+push constant 0
+return
+label IF_END33
+goto WHILE_EXP2
+label WHILE_END2
+push this 10
+return
+label IF_FALSE32
+label WHILE_EXP3
+push local 0
+not
+push this 12
+not
+and
+not
+if-goto WHILE_END3
+push pointer 0
+call GeometryDash.checkInput 1
+if-goto IF_TRUE51
+goto IF_FALSE51
+label IF_TRUE51
+push this 2
+call Player.update 1
+pop temp 0
+push this 3
+call Obstacle.update 1
+pop temp 0
+push this 3
+push this 2
+call Obstacle.collidesWith 2
+if-goto IF_TRUE52
+goto IF_FALSE52
+label IF_TRUE52
+push constant 0
+not
+pop local 0
+goto IF_END52
+label IF_FALSE52
+push this 0
+call Sys.wait 1
+pop temp 0
+push this 9
+push constant 4
+eq
+if-goto IF_TRUE53
+goto IF_FALSE53
+label IF_TRUE53
+push constant 0
+pop this 9
+push this 10
+push constant 1
+add
+pop this 10
+push constant 0
+push constant 7
+call Output.moveCursor 2
+pop temp 0
+push this 10
+call Output.printInt 1
+pop temp 0
+push this 1
+push constant 1
+eq
+push this 10
+push constant 1000
+gt
+push this 10
+push constant 1000
+eq
+or
+and
+if-goto IF_TRUE54
+goto IF_FALSE54
+label IF_TRUE54
+push constant 0
+not
+pop this 12
+label IF_FALSE54
+goto IF_END53
+label IF_FALSE53
+push this 9
+push constant 1
+add
+pop this 9
+label IF_END53
+label IF_END52
+goto IF_END51
+label IF_FALSE51
+push constant 0
+return
+label IF_END51
+goto WHILE_EXP3
+label WHILE_END3
+push this 10
+return
+function GeometryDash.hasWon 0
+push argument 0
+pop pointer 0
+push this 12
+return
+function GeometryDash.checkInput 1
+push argument 0
+pop pointer 0
+call Keyboard.keyPressed 0
+pop local 0
+push local 0
+push constant 32
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 2
+call Player.jump 1
+pop temp 0
+push constant 0
+not
+return
+label IF_FALSE0
+push local 0
+push constant 81
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function GeometryDash.dispose 0
+push argument 0
+pop pointer 0
+push this 2
+call Player.dispose 1
+pop temp 0
+push this 3
+call Obstacle.dispose 1
+pop temp 0
+push this 1
+push constant 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 8
+push constant 1
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 4
+call Obstacle.dispose 1
+pop temp 0
+label IF_FALSE1
+push this 8
+push constant 2
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 5
+call Obstacle.dispose 1
+pop temp 0
+label IF_FALSE2
+push this 8
+push constant 3
+gt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 6
+call Obstacle.dispose 1
+pop temp 0
+label IF_FALSE3
+label IF_FALSE0
+push this 1
+push constant 3
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 7
+call SquareObstacle.dispose 1
+pop temp 0
+label IF_FALSE4
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

@@ -1,0 +1,366 @@
+class GeometryDash {
+    field int delay;
+    field int levelIndex;
+    field Player player;
+    field Obstacle obstacle;
+    field Obstacle obstacle2;
+    field Obstacle obstacle3;
+    field Obstacle obstacle4;
+    field SquareObstacle squareObstacle;
+    field int spawnCount;
+    field int clock;
+    field int score;
+    field int highScore;
+    field boolean isWin;
+
+    // Level 4 mixed obstacles and gravity inversion
+    field Obstacle lvl4Obs1, lvl4Obs2, lvl4Obs3, lvl4Obs4;
+    field SquareObstacle lvl4Sq1, lvl4Sq2, lvl4Sq3, lvl4Sq4;
+    field int lvl4Type1, lvl4Type2, lvl4Type3, lvl4Type4;
+    field int lvl4Count;
+    field boolean gravityInverted;
+    field int invertActiveTimer;  // frames remaining
+    field int invertCooldownTimer; // frames until reuse
+
+    /** Initialize game with high score and selected level */
+    constructor GeometryDash new(int highestScore, int lvl) {
+        var int t, i;
+        var int prevX;
+        let levelIndex = lvl;
+        let isWin = false;
+        // Initialize player at 100px from left, just above ground
+        let player = Player.new(100, 240 - 32);
+
+        // Initialize single obstacle
+        let obstacle = Obstacle.new();
+        if (lvl = 2) {
+            // random obstacle count between 1 and 4
+            let spawnCount = Random.randRange(1, 4);
+            do obstacle.setRandomMode(true);
+            if (spawnCount > 1) {
+                let obstacle2 = Obstacle.new(); do obstacle2.setRandomMode(true);
+                do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 48);
+                if (spawnCount > 2) {
+                    let obstacle3 = Obstacle.new(); do obstacle3.setRandomMode(true);
+                    do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 48);
+                    if (spawnCount > 3) {
+                        let obstacle4 = Obstacle.new(); do obstacle4.setRandomMode(true);
+                        do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 48);
+                    }
+                }
+            }
+        }
+        // Level 3: square obstacle
+        if (lvl = 3) {
+            let squareObstacle = SquareObstacle.new();
+        }
+        // Level 4: mixed obstacles with spacing and gravity invert
+        if (lvl = 4) {
+            let lvl4Count = Random.randRange(1, 4);
+            let prevX = 511;
+            let i = 1;
+            while ((i < lvl4Count)|(i = lvl4Count)) {
+                let t = Random.randRange(0, 1);
+                if (t = 0) {
+                    let lvl4Type1 = t; // triangle
+                    let lvl4Obs1 = Obstacle.new();
+                    do lvl4Obs1.setRandomMode(false);
+                    do lvl4Obs1.resetWithOffset(prevX + 64);
+                    let prevX = lvl4Obs1.getX() + lvl4Obs1.getWidth();
+                } else {
+                    let lvl4Type1 = t; // square
+                    let lvl4Sq1 = SquareObstacle.new();
+                    do lvl4Sq1.resetWithOffset(prevX + 64);
+                    let prevX = lvl4Sq1.getX() + lvl4Sq1.getSize();
+                }
+                let i = i + 1;
+            }
+            let gravityInverted = false;
+            let invertActiveTimer = 0;
+            let invertCooldownTimer = 0;
+        }
+
+        // Game settings
+        let delay = 18;
+        let clock = 0;
+        let score = 0;
+        let highScore = highestScore;
+
+        // Setup screen
+        do Screen.clearScreen();
+        do Output.moveCursor(0, 0);
+        do Output.printString("Score: ");
+        do Output.moveCursor(0, 7);
+        do Output.printInt(score);
+
+        // Draw ground
+        do Graphics.drawGround();
+
+        return this;
+    }
+
+    method int run() {
+        var boolean crashed;
+        var int py, ph;
+        var int key;
+        let crashed = false;
+        if (levelIndex = 4) {
+            while (~crashed) {
+                // Input: jump or invert gravity
+                let key = Keyboard.keyPressed();
+                if (key = 32) { do player.jump(); }
+                if ((key = 73) & (invertCooldownTimer = 0)) {
+                    let gravityInverted = true;
+                    let invertActiveTimer = (4000 / delay);
+                    let invertCooldownTimer = (30000 / delay);
+                }
+                // timers
+                if (invertActiveTimer > 0) {
+                    let invertActiveTimer = invertActiveTimer - 1;
+                } else {
+                    let gravityInverted = false;
+                }
+                if (invertCooldownTimer > 0) {
+                    let invertCooldownTimer = invertCooldownTimer - 1;
+                }
+                // update player
+                if (gravityInverted) { do player.updateInverted(); } else { do player.update(); }
+                // update and handle collisions for each mixed obstacle
+                if ((lvl4Count = 1)|(lvl4Count > 1)) {
+                    if (lvl4Type1 = 0) {
+                        do lvl4Obs1.update();
+                        if (lvl4Obs1.collidesWith(player)) { let crashed = true; }
+                    } else {
+                        do lvl4Sq1.update();
+                        if (lvl4Sq1.collidesWith(player)) {
+                            let py = player.collision_box_y();
+                            let ph = player.collision_box_height();
+                            if ((py + ph) < (lvl4Sq1.getY() + 8)) {
+                                do player.land(lvl4Sq1.getY());
+                            } else { let crashed = true; }
+                        }
+                    }
+                }
+                if ((lvl4Count > 2)|(lvl4Count = 2)) {
+                    if (lvl4Type2 = 0) {
+                        do lvl4Obs2.update(); if (lvl4Obs2.collidesWith(player)) { let crashed = true; }
+                    } else {
+                        do lvl4Sq2.update();
+                        if (lvl4Sq2.collidesWith(player)) {
+                            let py = player.collision_box_y(); let ph = player.collision_box_height();
+                            if ((py + ph) < (lvl4Sq2.getY() + 8)) { do player.land(lvl4Sq2.getY()); } else { let crashed = true; }
+                        }
+                    }
+                }
+                if ((lvl4Count = 3)|(lvl4Count > 3)) {
+                    if (lvl4Type3 = 0) {
+                        do lvl4Obs3.update(); if (lvl4Obs3.collidesWith(player)) { let crashed = true; }
+                    } else {
+                        do lvl4Sq3.update();
+                        if (lvl4Sq3.collidesWith(player)) {
+                            let py = player.collision_box_y(); let ph = player.collision_box_height();
+                            if ((py + ph) < (lvl4Sq3.getY() + 8)) { do player.land(lvl4Sq3.getY()); } else { let crashed = true; }
+                        }
+                    }
+                }
+                if ((lvl4Count > 4)|(lvl4Count = 4)) {
+                    if (lvl4Type4 = 0) {
+                        do lvl4Obs4.update(); if (lvl4Obs4.collidesWith(player)) { let crashed = true; }
+                    } else {
+                        do lvl4Sq4.update();
+                        if (lvl4Sq4.collidesWith(player)) {
+                            let py = player.collision_box_y(); let ph = player.collision_box_height();
+                            if ((py + ph) < (lvl4Sq4.getY() + 8)) { do player.land(lvl4Sq4.getY()); } else { let crashed = true; }
+                        }
+                    }
+                }
+                // advance frame and score
+                do Sys.wait(delay);
+                let score = score + 1;
+                do Output.moveCursor(0, 7);
+                do Output.printInt(score);
+            }
+            return score;
+        }
+        if (levelIndex = 3) {
+            while (~crashed) {
+                if (checkInput()) {
+                    do player.update();
+                    do squareObstacle.update();
+                    // only handle respawn and collision when visible
+                    if (squareObstacle.isVisible()) {
+                        // respawn when off-screen
+                        if (squareObstacle.getX() < -squareObstacle.getSize()) {
+                            do squareObstacle.reset();
+                        }
+                        // handle collision: land if from above within 8px, else crash
+                        if (squareObstacle.collidesWith(player)) {
+                            let py = player.collision_box_y();
+                            let ph = player.collision_box_height();
+                            if ((py + ph) < (squareObstacle.getY() + 8)) {
+                                do player.land(squareObstacle.getY());
+                            } else {
+                                let crashed = true;
+                            }
+                        }
+                    }
+                    // advance frame, update score
+                    do Sys.wait(delay);
+                    let score = score + 1;
+                    do Output.moveCursor(0, 7);
+                    do Output.printInt(score);
+                } else {
+                    return 0;
+                }
+            }
+            return score;
+        }
+        if (levelIndex = 2) {
+            // Level 2: random obstacles, time-based survival
+            while (~crashed) {
+                if (checkInput()) {
+                    do player.update();
+                    // update and reset chain of obstacles
+                    do obstacle.update();
+                    if (spawnCount > 1) { do obstacle2.update(); }
+                    if (spawnCount > 2) { do obstacle3.update(); }
+                    if (spawnCount > 3) { do obstacle4.update(); }
+
+                    // reset on off-screen
+                    if (obstacle.getX() < -obstacle.getWidth()) {
+                        do obstacle.resetWithOffset(511);
+                    }
+                    if (spawnCount > 1) {
+                        if (obstacle2.getX() < -obstacle2.getWidth()) {
+                            do obstacle2.resetWithOffset(obstacle.getX() + obstacle.getWidth() + 48);
+                        }
+                    }
+                    if (spawnCount > 2) {
+                        if (obstacle3.getX() < -obstacle3.getWidth()) {
+                            do obstacle3.resetWithOffset(obstacle2.getX() + obstacle2.getWidth() + 48);
+                        }
+                    }
+                    if (spawnCount > 3) {
+                        if (obstacle4.getX() < -obstacle4.getWidth()) {
+                            do obstacle4.resetWithOffset(obstacle3.getX() + obstacle3.getWidth() + 48);
+                        }
+                    }
+
+                    // check collisions: obstacle1
+                    if (obstacle.collidesWith(player)) {
+                        let crashed = true;
+                    } else {
+                        // then obstacle2 if exists
+                        if (spawnCount > 1) {
+                            if (obstacle2.collidesWith(player)) {
+                                let crashed = true;
+                                // skip scoring
+                            } else {
+                                // obstacle3
+                                if (spawnCount > 2) {
+                                    if (obstacle3.collidesWith(player)) {
+                                        let crashed = true;
+                                    } else {
+                                        // obstacle4
+                                        if (spawnCount > 3) {
+                                            if (obstacle4.collidesWith(player)) {
+                                                let crashed = true;
+                                            } else {
+                                                // no collision, score
+                                                do Sys.wait(delay);
+                                                let score = score + 1;
+                                                do Output.moveCursor(0, 7);
+                                                do Output.printInt(score);
+                                            }
+                                        } else {
+                                            // only 3 obstacles used, score
+                                            do Sys.wait(delay);
+                                            let score = score + 1;
+                                            do Output.moveCursor(0, 7);
+                                            do Output.printInt(score);
+                                        }
+                                    }
+                                } else {
+                                    // only 2 obstacles used, score
+                                    do Sys.wait(delay);
+                                    let score = score + 1;
+                                    do Output.moveCursor(0, 7);
+                                    do Output.printInt(score);
+                                }
+                            }
+                        } else {
+                            // only single obstacle, score
+                            do Sys.wait(delay);
+                            let score = score + 1;
+                            do Output.moveCursor(0, 7);
+                            do Output.printInt(score);
+                        }
+                    }
+                } else { return 0; }
+            }
+            return score;
+        }
+        // run until crash or win
+        while ((~crashed) & (~isWin)) {
+            if (checkInput()) {
+                do player.update();
+                do obstacle.update();
+                if (obstacle.collidesWith(player)) {
+                    let crashed = true;
+                } else {
+                    do Sys.wait(delay);
+                    if (clock = 4) {
+                        let clock = 0;
+                        let score = score + 1;
+                        do Output.moveCursor(0, 7);
+                        do Output.printInt(score);
+                        // win condition for level 1
+                        if ((levelIndex = 1) & ((score > 1000) | (score = 1000))) {
+                            let isWin = true;
+                        }
+                    } else {
+                        let clock = clock + 1;
+                    }
+                }
+            } 
+            else {
+                return 0;
+            }
+        }
+        return score;
+    }
+
+    /** Indicates if player won the level */
+    method boolean hasWon() {
+        return isWin;
+    }
+
+    /** Handle user input: jump on SPACE, quit on Q */
+    method boolean checkInput() {
+        var int key;
+        let key = Keyboard.keyPressed();
+        // wait for key press
+        if (key = 32) { // SPACE to jump
+            do player.jump();
+            return true;
+        }
+        if (key = 81) { // Q to quit mid-game
+            return false;
+        }
+        return true;
+    }
+
+    /** Frees memory for game objects */
+    method void dispose() {
+        do player.dispose();
+        do obstacle.dispose();
+        if (levelIndex = 2) {
+            if (spawnCount > 1) { do obstacle2.dispose(); }
+            if (spawnCount > 2) { do obstacle3.dispose(); }
+            if (spawnCount > 3) { do obstacle4.dispose(); }
+        }
+        if (levelIndex = 3) { do squareObstacle.dispose(); }
+        do Memory.deAlloc(this);
+        return;
+    }
+}

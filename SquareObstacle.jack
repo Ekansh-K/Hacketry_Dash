@@ -1,0 +1,110 @@
+class SquareObstacle {
+    field int x, y, size, speed;
+    field boolean isVisible;
+
+    constructor SquareObstacle new() {
+        let size = 32;
+        let speed = 4;
+        do reset();
+        return this;
+    }
+
+    method void reset() {
+        let x = 511 + 100;             // spawn off right edge
+        let y = Graphics.groundLevel() - size;
+        let isVisible = false;
+        return;
+    }
+    /** Resets obstacle position at least minX from left edge */
+    method void resetWithOffset(int minX) {
+        let x = minX;
+        let y = Graphics.groundLevel() - size;
+        let isVisible = false;
+        return;
+    }
+
+    method void update() {
+        if (isVisible) { do erase(); }
+        let x = x - speed;
+        if ((x > -size) & (x < 512)) {
+            let isVisible = true;
+            do draw();
+        } else {
+            let isVisible = false;
+            if (x < -size) { do reset(); }
+        }
+        return;
+    }
+
+    method void draw() {
+        // draw a clamped square directly to avoid illegal coords
+        var int x0, y0, x1, y1;
+        let x0 = x;
+        let y0 = y;
+        let x1 = x + size;
+        let y1 = y + size;
+        // clamp to screen
+        if (x0 < 0)   { let x0 = 0; }
+        if (y0 < 0)   { let y0 = 0; }
+        if (x1 > 511) { let x1 = 511; }
+        if (y1 > 239) { let y1 = 239; }
+        if ((x1 > x0) & (y1 > y0)) {
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x0, y0, x1, y1);
+        }
+        return;
+    }
+
+    method void erase() {
+        // erase a clamped square directly to avoid illegal coords
+        var int x0, y0, x1, y1;
+        let x0 = x;
+        let y0 = y;
+        let x1 = x + size;
+        let y1 = y + size;
+        // clamp to screen
+        if (x0 < 0)   { let x0 = 0; }
+        if (y0 < 0)   { let y0 = 0; }
+        if (x1 > 511) { let x1 = 511; }
+        if (y1 > 239) { let y1 = 239; }
+        if ((x1 > x0) & (y1 > y0)) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x0, y0, x1, y1);
+        }
+        return;
+    }
+
+    method boolean collidesWith(Player player) {
+        var int px, py, pw, ph;
+        if (isVisible) {
+            let px = player.collision_box_x()-32;
+            let py = player.collision_box_y();
+            let pw = player.collision_box_width();
+            let ph = player.collision_box_height();
+            if (((px + pw) > x) & (px < (x + size)) &
+                ((py + ph) > y) & (py < (y + size))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    method int getY() {
+        return y;
+    }
+    method int getSize() {
+        return size;
+    }
+    method int getX() {
+        return x;
+    }
+    /** Indicates if the square obstacle is currently visible on screen */
+    method boolean isVisible() {
+        return isVisible;
+    }
+
+    method void dispose() {
+        do erase();
+        do Memory.deAlloc(this);
+        return;
+    }
+}
