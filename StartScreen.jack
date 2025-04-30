@@ -1,0 +1,98 @@
+class StartScreen {
+    /** Constructor for StartScreen */
+    constructor StartScreen new() {
+        return this;
+    }
+
+    function int run() {
+        var boolean exit;
+        var int key, cycles;
+
+        // Clear the screen first
+        do Screen.clearScreen();
+
+        // Draw title "HACKETRY DASH" at center top
+        do Output.moveCursor(3, 27);
+        do Output.printString("Hacketry Dash");
+
+        // Draw horizontal line under title
+        do Screen.drawLine(186, 50, 355, 50);
+
+        // Instructions
+        do Output.moveCursor(8, 10);
+        do Output.printString("HOW TO PLAY:");
+
+        do Output.moveCursor(10, 10);
+        do Output.printString("- Press SPACE to jump");
+
+        do Output.moveCursor(12, 10);
+        do Output.printString("- Avoid all obstacles");
+
+        do Output.moveCursor(14, 10);
+        do Output.printString("- The longer you survive, the higher your score");
+
+        // Draw prompt at bottom
+        do Output.moveCursor(20, 20);
+        do Output.printString("Press SPACE to start");
+
+        // Count cycles until any key is pressed (for random seed)
+        let cycles = 0;
+        while (Keyboard.keyPressed() = 0) {
+            let cycles = cycles + 1;
+        }
+
+        // Wait for space key specifically
+        let exit = false;
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+            if (key = 32) { // Space key
+                let exit = true;
+            }
+        }
+
+        // Wait until key is released to prevent immediate jump
+        while (Keyboard.keyPressed() = 32) {}
+
+        return cycles;
+    }
+
+    /** Displays level start screen for selected level */
+    function void showLevelStart(int level) {
+        var boolean exit;
+        var int key;
+
+        // Clear screen and show level info
+        do Screen.clearScreen();
+        do Output.moveCursor(5, 23);
+        // Title per level
+        if (level = 2) { do Output.printString("Random Gauntlet Level : "); }
+        if (level = 3) { do Output.printString("Block Tester Level : "); }
+        if (level = 4) { do Output.printString("Mixed Mayhem Level : "); }
+        if (level = 1) { do Output.printString("Tutorial Level : "); }
+        if (level = 5) { do Output.printString("Power Frenzy Level : "); }
+        do Output.printInt(level);
+
+        do Output.moveCursor(7, 22);
+        do Output.printString("Press SPACE to start");
+
+        do Output.moveCursor(11, 12);
+        // Instructions per level
+        if (level = 2) { do Output.printString("Avoid obstacles as long as possible"); }
+        if (level = 3) { do Output.printString("Stand on squares and test your skill"); }
+        if (level = 4) { do Output.printString("Press I to invert gravity (4s active,30s cooldown)"); }
+        if (level = 1) { do Output.printString("Avoid the spikes and reach 1000 points"); }
+        if (level = 5) { do Output.printString("Collect J for double jump, S for speed boost"); }
+
+        // Wait for SPACE key
+        let exit = false;
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+            if (key = 32) {
+                let exit = true;
+            }
+        }
+        // Prevent immediate action on key release
+        while (Keyboard.keyPressed() = 32) {}
+        return;
+    }
+}

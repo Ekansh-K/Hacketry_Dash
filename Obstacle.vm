@@ -1,0 +1,361 @@
+function Obstacle.new 0
+push constant 12
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+call Obstacle.reset 1
+pop temp 0
+push pointer 0
+return
+function Obstacle.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Obstacle.erase 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Obstacle.update 1
+push argument 0
+pop pointer 0
+push this 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Obstacle.erase 1
+pop temp 0
+label IF_FALSE0
+push this 0
+push this 4
+sub
+pop this 0
+push this 0
+push this 2
+push this 8
+sub
+push constant 2
+call Math.divide 2
+add
+pop this 6
+push this 1
+pop this 7
+push this 0
+push constant 512
+lt
+push this 0
+push this 2
+add
+push constant 0
+gt
+and
+pop local 0
+push local 0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop this 5
+push pointer 0
+call Obstacle.draw 1
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push constant 0
+pop this 5
+push this 0
+push this 2
+add
+push constant 0
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Obstacle.reset 1
+pop temp 0
+label IF_FALSE2
+label IF_END1
+push constant 0
+return
+function Obstacle.setRandomMode 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 10
+push constant 0
+return
+function Obstacle.reset 0
+push argument 0
+pop pointer 0
+push this 10
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+push constant 1
+call Random.randRange 2
+push constant 1
+eq
+pop this 11
+push this 11
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 16
+pop this 2
+push constant 16
+pop this 3
+push constant 16
+pop this 8
+push constant 16
+pop this 9
+goto IF_END1
+label IF_FALSE1
+push constant 32
+pop this 2
+push constant 32
+pop this 3
+push constant 24
+pop this 8
+push this 3
+pop this 9
+label IF_END1
+push constant 511
+push constant 0
+push constant 25
+call Random.randRange 2
+add
+pop this 0
+call Graphics.groundLevel 0
+push this 3
+sub
+pop this 1
+push this 0
+push this 2
+push this 8
+sub
+push constant 2
+call Math.divide 2
+add
+pop this 6
+push this 1
+pop this 7
+push constant 4
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+return
+label IF_FALSE0
+push constant 511
+push constant 100
+add
+pop this 0
+push constant 32
+pop this 2
+push constant 32
+pop this 3
+push constant 24
+pop this 8
+push this 3
+pop this 9
+call Graphics.groundLevel 0
+push this 3
+sub
+pop this 1
+push this 0
+push this 2
+push this 8
+sub
+push constant 2
+call Math.divide 2
+add
+pop this 6
+push this 1
+pop this 7
+push constant 4
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+return
+function Obstacle.collidesWith 4
+push argument 0
+pop pointer 0
+push this 5
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+call Player.collision_box_x 1
+push constant 32
+sub
+pop local 0
+push argument 1
+call Player.collision_box_y 1
+pop local 1
+push argument 1
+call Player.collision_box_width 1
+pop local 2
+push argument 1
+call Player.collision_box_height 1
+pop local 3
+push local 0
+push local 2
+add
+push this 6
+gt
+push local 0
+push this 6
+push this 8
+add
+lt
+and
+push local 1
+push local 3
+add
+push this 7
+gt
+and
+push local 1
+push this 7
+push this 9
+add
+lt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+return
+label IF_FALSE1
+label IF_FALSE0
+push constant 0
+return
+function Obstacle.draw 0
+push argument 0
+pop pointer 0
+push this 10
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 11
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push this 1
+call Graphics.drawSmallTriangleObstacle 2
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 0
+push this 1
+call Graphics.drawTriangleObstacle 2
+pop temp 0
+label IF_END1
+push constant 0
+return
+label IF_FALSE0
+push this 0
+push this 1
+call Graphics.drawTriangleObstacle 2
+pop temp 0
+push constant 0
+return
+function Obstacle.erase 0
+push argument 0
+pop pointer 0
+push this 10
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 11
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push this 1
+call Graphics.eraseSmallTriangleObstacle 2
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 0
+push this 1
+call Graphics.eraseTriangleObstacle 2
+pop temp 0
+label IF_END1
+push constant 0
+return
+label IF_FALSE0
+push this 0
+push this 1
+call Graphics.eraseTriangleObstacle 2
+pop temp 0
+push constant 0
+return
+function Obstacle.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Obstacle.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Obstacle.getHeight 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Obstacle.getWidth 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Obstacle.resetWithOffset 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Obstacle.reset 1
+pop temp 0
+push this 0
+push argument 1
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+pop this 0
+push this 0
+push this 2
+push this 8
+sub
+push constant 2
+call Math.divide 2
+add
+pop this 6
+push this 1
+pop this 7
+label IF_FALSE0
+push constant 0
+return
+function Obstacle.isVisible 0
+push argument 0
+pop pointer 0
+push this 5
+return
+function Obstacle.setY 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
+return

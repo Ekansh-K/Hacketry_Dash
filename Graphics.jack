@@ -1,0 +1,716 @@
+class Graphics {
+    // Screen memory calculation constants
+    static int screenStart;
+    static int screenSize;
+
+    // Initialize graphics system
+    function void init() {
+        let screenStart = 16384;
+        let screenSize = 8192;
+        return;
+    }
+
+    // Checks if drawing at memAddress + maxOffset is within screen bounds
+    function boolean isAddressValid(int memAddress, int maxOffset) {
+        if ((memAddress + maxOffset > screenStart + screenSize) | (memAddress + maxOffset = screenStart + screenSize)) {
+            return false;
+        }
+        return true;
+    }
+
+    // Calculate screen memory address from x,y coordinates
+    function int getMemoryAddress(int x, int y) {
+        return screenStart + (y * 32) + x;
+    }
+
+    // Draw player (32x32 sprite) at position x,y
+    function void drawPlayer(int x, int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        // Column 0
+        do Memory.poke(memAddress, -1);
+        do Memory.poke(memAddress + 32, -1);
+        do Memory.poke(memAddress + 64, -1);
+        do Memory.poke(memAddress + 96, -1);
+        do Memory.poke(memAddress + 128, -1);
+        do Memory.poke(memAddress + 160, -1);
+        do Memory.poke(memAddress + 192, -1);
+        do Memory.poke(memAddress + 224, -1);
+        do Memory.poke(memAddress + 256, -4033);
+        do Memory.poke(memAddress + 288, -4033);
+        do Memory.poke(memAddress + 320, -4033);
+        do Memory.poke(memAddress + 352, -4033);
+        do Memory.poke(memAddress + 384, -4033);
+        do Memory.poke(memAddress + 416, -4033);
+        do Memory.poke(memAddress + 448, -1);
+        do Memory.poke(memAddress + 480, -1);
+        do Memory.poke(memAddress + 512, -1);
+        do Memory.poke(memAddress + 544, -1);
+        do Memory.poke(memAddress + 576, -1);
+        do Memory.poke(memAddress + 608, -1);
+        do Memory.poke(memAddress + 640, 63);
+        do Memory.poke(memAddress + 672, 63);
+        do Memory.poke(memAddress + 704, 63);
+        do Memory.poke(memAddress + 736, 63);
+        do Memory.poke(memAddress + 768, -1);
+        do Memory.poke(memAddress + 800, -1);
+        do Memory.poke(memAddress + 832, -1);
+        do Memory.poke(memAddress + 864, -1);
+        do Memory.poke(memAddress + 896, -1);
+        do Memory.poke(memAddress + 928, -1);
+        do Memory.poke(memAddress + 960, -1);
+        do Memory.poke(memAddress + 992, -1);
+
+        // Column 1
+        do Memory.poke(memAddress + 1, -1);
+        do Memory.poke(memAddress + 33, -1);
+        do Memory.poke(memAddress + 65, -1);
+        do Memory.poke(memAddress + 97, -1);
+        do Memory.poke(memAddress + 129, -1);
+        do Memory.poke(memAddress + 161, -1);
+        do Memory.poke(memAddress + 193, -1);
+        do Memory.poke(memAddress + 225, -1);
+        do Memory.poke(memAddress + 257, -1009);
+        do Memory.poke(memAddress + 289, -1009);
+        do Memory.poke(memAddress + 321, -1009);
+        do Memory.poke(memAddress + 353, -1009);
+        do Memory.poke(memAddress + 385, -1009);
+        do Memory.poke(memAddress + 417, -1009);
+        do Memory.poke(memAddress + 449, -1);
+        do Memory.poke(memAddress + 481, -1);
+        do Memory.poke(memAddress + 513, -1);
+        do Memory.poke(memAddress + 545, -1);
+        do Memory.poke(memAddress + 577, -1);
+        do Memory.poke(memAddress + 609, -1);
+        do Memory.poke(memAddress + 641, -1024);
+        do Memory.poke(memAddress + 673, -1024);
+        do Memory.poke(memAddress + 705, -1024);
+        do Memory.poke(memAddress + 737, -1024);
+        do Memory.poke(memAddress + 769, -1);
+        do Memory.poke(memAddress + 801, -1);
+        do Memory.poke(memAddress + 833, -1);
+        do Memory.poke(memAddress + 865, -1);
+        do Memory.poke(memAddress + 897, -1);
+        do Memory.poke(memAddress + 929, -1);
+        do Memory.poke(memAddress + 961, -1);
+        do Memory.poke(memAddress + 993, -1);
+        return;
+    }
+
+    // Erase player (32x32 sprite) at position x,y
+    function void erasePlayer(int x , int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+        // Column 0
+        do Memory.poke(memAddress, 0);
+        do Memory.poke(memAddress + 32, 0);
+        do Memory.poke(memAddress + 64, 0);
+        do Memory.poke(memAddress + 96, 0);
+        do Memory.poke(memAddress + 128, 0);
+        do Memory.poke(memAddress + 160, 0);
+        do Memory.poke(memAddress + 192, 0);
+        do Memory.poke(memAddress + 224, 0);
+        do Memory.poke(memAddress + 256, 0);
+        do Memory.poke(memAddress + 288, 0);
+        do Memory.poke(memAddress + 320, 0);
+        do Memory.poke(memAddress + 352, 0);
+        do Memory.poke(memAddress + 384, 0);
+        do Memory.poke(memAddress + 416, 0);
+        do Memory.poke(memAddress + 448, 0);
+        do Memory.poke(memAddress + 480, 0);
+        do Memory.poke(memAddress + 512, 0);
+        do Memory.poke(memAddress + 544, 0);
+        do Memory.poke(memAddress + 576, 0);
+        do Memory.poke(memAddress + 608, 0);
+        do Memory.poke(memAddress + 640, 0);
+        do Memory.poke(memAddress + 672, 0);
+        do Memory.poke(memAddress + 704, 0);
+        do Memory.poke(memAddress + 736, 0);
+        do Memory.poke(memAddress + 768, 0);
+        do Memory.poke(memAddress + 800, 0);
+        do Memory.poke(memAddress + 832, 0);
+        do Memory.poke(memAddress + 864, 0);
+        do Memory.poke(memAddress + 896, 0);
+        do Memory.poke(memAddress + 928, 0);
+        do Memory.poke(memAddress + 960, 0);
+        do Memory.poke(memAddress + 992, 0);
+        // Column 1
+        do Memory.poke(memAddress + 1, 0);
+        do Memory.poke(memAddress + 33, 0);
+        do Memory.poke(memAddress + 65, 0);
+        do Memory.poke(memAddress + 97, 0);
+        do Memory.poke(memAddress + 129, 0);
+        do Memory.poke(memAddress + 161, 0);
+        do Memory.poke(memAddress + 193, 0);
+        do Memory.poke(memAddress + 225, 0);
+        do Memory.poke(memAddress + 257, 0);
+        do Memory.poke(memAddress + 289, 0);
+        do Memory.poke(memAddress + 321, 0);
+        do Memory.poke(memAddress + 353, 0);
+        do Memory.poke(memAddress + 385, 0);
+        do Memory.poke(memAddress + 417, 0);
+        do Memory.poke(memAddress + 449, 0);
+        do Memory.poke(memAddress + 481, 0);
+        do Memory.poke(memAddress + 513, 0);
+        do Memory.poke(memAddress + 545, 0);
+        do Memory.poke(memAddress + 577, 0);
+        do Memory.poke(memAddress + 609, 0);
+        do Memory.poke(memAddress + 641, 0);
+        do Memory.poke(memAddress + 673, 0);
+        do Memory.poke(memAddress + 705, 0);
+        do Memory.poke(memAddress + 737, 0);
+        do Memory.poke(memAddress + 769, 0);
+        do Memory.poke(memAddress + 801, 0);
+        do Memory.poke(memAddress + 833, 0);
+        do Memory.poke(memAddress + 865, 0);
+        do Memory.poke(memAddress + 897, 0);
+        do Memory.poke(memAddress + 929, 0);
+        do Memory.poke(memAddress + 961, 0);
+        do Memory.poke(memAddress + 993, 0);
+        return;
+   }
+
+    // Draw large triangle obstacle (32x32)
+    function void drawTriangleObstacle(int x, int y) {
+        var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 32) > 239)) { return; }
+
+        let drawX = x;
+        let drawWidth = 32;
+        let drawHeight = 32;
+
+        // Ensure drawing stays within screen bounds
+        if (drawX < 0) {
+            let drawWidth = drawWidth + drawX;
+            let drawX = 0;
+        }
+        if ((drawX + drawWidth) > 511) {
+            let drawWidth = 511 - drawX;
+        }
+
+        if (drawWidth > 0) {
+            do Screen.setColor(true);
+            // Draw the triangle using three lines
+            do Screen.drawLine(drawX, y + drawHeight, drawX + drawWidth, y + drawHeight);
+            do Screen.drawLine(drawX, y + drawHeight, drawX + (drawWidth / 2), y);
+            do Screen.drawLine(drawX + drawWidth, y + drawHeight, drawX + (drawWidth / 2), y);
+        }
+        return;
+    }
+
+    // Erase large triangle obstacle (32x32)
+    function void eraseTriangleObstacle(int x, int y) {
+        var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 32) > 239)) { return; }
+
+        let drawX = x;
+        let drawWidth = 32;
+        let drawHeight = 32;
+
+        // Ensure drawing stays within screen bounds
+        if (drawX < 0) {
+            let drawWidth = drawWidth + drawX;
+            let drawX = 0;
+        }
+        if ((drawX + drawWidth) > 511) {
+            let drawWidth = 511 - drawX;
+        }
+
+        if (drawWidth > 0) {
+            do Screen.setColor(false);
+            // Erase the triangle by drawing with color=false
+            do Screen.drawLine(drawX, y + drawHeight, drawX + drawWidth, y + drawHeight);
+            do Screen.drawLine(drawX, y + drawHeight, drawX + (drawWidth / 2), y);
+            do Screen.drawLine(drawX + drawWidth, y + drawHeight, drawX + (drawWidth / 2), y);
+        }
+        return;
+    }
+
+    // Draw small triangle obstacle (16x16)
+    function void drawSmallTriangleObstacle(int x, int y) {
+        var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 16) > 239)) { return; }
+
+        let drawX = x;
+        let drawWidth = 16;
+        let drawHeight = 16;
+
+        // Ensure drawing stays within screen bounds
+        if (drawX < 0) {
+            let drawWidth = drawWidth + drawX;
+            let drawX = 0;
+        }
+        if ((drawX + drawWidth) > 511) {
+            let drawWidth = 511 - drawX;
+        }
+
+        if (drawWidth > 0) {
+            do Screen.setColor(true);
+            // Draw the triangle using three lines
+            do Screen.drawLine(drawX, y + drawHeight, drawX + drawWidth, y + drawHeight);
+            do Screen.drawLine(drawX, y + drawHeight, drawX + (drawWidth / 2), y);
+            do Screen.drawLine(drawX + drawWidth, y + drawHeight, drawX + (drawWidth / 2), y);
+        }
+        return;
+    }
+
+    // Erase small triangle obstacle (16x16)
+    function void eraseSmallTriangleObstacle(int x, int y) {
+        var int drawX, drawWidth, drawHeight;
+        // skip if off vertical screen
+        if ((y < 0) | ((y + 16) > 239)) { return; }
+
+        let drawX = x;
+        let drawWidth = 16;
+        let drawHeight = 16;
+
+        // Ensure drawing stays within screen bounds
+        if (drawX < 0) {
+            let drawWidth = drawWidth + drawX;
+            let drawX = 0;
+        }
+        if ((drawX + drawWidth) > 511) {
+            let drawWidth = 511 - drawX;
+        }
+
+        if (drawWidth > 0) {
+            do Screen.setColor(false);
+            // Erase the triangle by drawing with color=false
+            do Screen.drawLine(drawX, y + drawHeight, drawX + drawWidth, y + drawHeight);
+            do Screen.drawLine(drawX, y + drawHeight, drawX + (drawWidth / 2), y);
+            do Screen.drawLine(drawX + drawWidth, y + drawHeight, drawX + (drawWidth / 2), y);
+        }
+        return;
+    }
+
+    // Draw square obstacle (32x32)
+    function void drawSquareBox(int x, int y, int size) {
+        var int x0, y0, x1, y1;
+        let x0 = x;
+        let y0 = y;
+        let x1 = x + size;
+        let y1 = y + size;
+        // clamp coordinates into valid screen region
+        if (x0 < 0)   { let x0 = 0; }
+        if (x0 > 511) { let x0 = 511; }
+        if (x1 < 0)   { let x1 = 0; }
+        if (x1 > 511) { let x1 = 511; }
+        if (y0 < 0)   { let y0 = 0; }
+        if (y0 > 239) { let y0 = 239; }
+        if (y1 < 0)   { let y1 = 0; }
+        if (y1 > 239) { let y1 = 239; }
+        if ((x1 > x0) & (y1 > y0)) {
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x0, y0, x1, y1);
+        }
+        return;
+    }
+
+    // Erase square obstacle (32x32)
+    function void eraseSquareBox(int x, int y, int size) {
+        var int x0, y0, x1, y1;
+        let x0 = x;
+        let y0 = y;
+        let x1 = x + size;
+        let y1 = y + size;
+        // clamp coordinates into valid screen region
+        if (x0 < 0)   { let x0 = 0; }
+        if (x0 > 511) { let x0 = 511; }
+        if (x1 < 0)   { let x1 = 0; }
+        if (x1 > 511) { let x1 = 511; }
+        if (y0 < 0)   { let y0 = 0; }
+        if (y0 > 239) { let y0 = 239; }
+        if (y1 < 0)   { let y1 = 0; }
+        if (y1 > 239) { let y1 = 239; }
+        if ((x1 > x0) & (y1 > y0)) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x0, y0, x1, y1);
+        }
+        return;
+    }
+
+    // Draw ground at bottom of screen using a filled rectangle
+    function void drawGround() {
+        var int gy, y1;
+        let gy = Graphics.groundLevel();
+        // clamp start Y to screen max
+        if (gy < 0)   { let gy = 0; }
+        if (gy > 239) { let gy = 239; }
+        let y1 = gy + 15;
+        if (y1 > 239) { let y1 = 239; }
+        do Screen.setColor(true);
+        do Screen.drawRectangle(0, gy, 511, y1);
+        return;
+    }
+    // Draw square obstacle 1 (32x32)
+    function void drawSquareObstacle1(int x, int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 993)) {
+            return;
+        }
+
+        // column 0
+        do Memory.poke(memAddress, -1);
+        do Memory.poke(memAddress + 32, -1);
+        do Memory.poke(memAddress + 64, -1);
+        do Memory.poke(memAddress + 96, 7);
+        do Memory.poke(memAddress + 128, 7);
+        do Memory.poke(memAddress + 160, 7);
+        do Memory.poke(memAddress + 192, 7);
+        do Memory.poke(memAddress + 224, 7);
+        do Memory.poke(memAddress + 256, 7);
+        do Memory.poke(memAddress + 288, 7);
+        do Memory.poke(memAddress + 320, 7);
+        do Memory.poke(memAddress + 352, 7);
+        do Memory.poke(memAddress + 384, 7);
+        do Memory.poke(memAddress + 416, 7);
+        do Memory.poke(memAddress + 448, 7);
+        do Memory.poke(memAddress + 480, 7);
+        do Memory.poke(memAddress + 512, 7);
+        do Memory.poke(memAddress + 544, 7);
+        do Memory.poke(memAddress + 576, 7);
+        do Memory.poke(memAddress + 608, 7);
+        do Memory.poke(memAddress + 640, 7);
+        do Memory.poke(memAddress + 672, 7);
+        do Memory.poke(memAddress + 704, 7);
+        do Memory.poke(memAddress + 736, 7);
+        do Memory.poke(memAddress + 768, 7);
+        do Memory.poke(memAddress + 800, 7);
+        do Memory.poke(memAddress + 832, 7);
+        do Memory.poke(memAddress + 864, 7);
+        do Memory.poke(memAddress + 896, 7);
+        do Memory.poke(memAddress + 928, -1);
+        do Memory.poke(memAddress + 960, -1);
+        do Memory.poke(memAddress + 992, -1);
+
+        // column 1
+        do Memory.poke(memAddress + 1, -1);
+        do Memory.poke(memAddress + 33, -1);
+        do Memory.poke(memAddress + 65, -1);
+        do Memory.poke(memAddress + 97, -8192);
+        do Memory.poke(memAddress + 129, -8192);
+        do Memory.poke(memAddress + 161, -8192);
+        do Memory.poke(memAddress + 193, -8192);
+        do Memory.poke(memAddress + 225, -8192);
+        do Memory.poke(memAddress + 257, -8192);
+        do Memory.poke(memAddress + 289, -8192);
+        do Memory.poke(memAddress + 321, -8192);
+        do Memory.poke(memAddress + 353, -8192);
+        do Memory.poke(memAddress + 385, -8192);
+        do Memory.poke(memAddress + 417, -8192);
+        do Memory.poke(memAddress + 449, -8192);
+        do Memory.poke(memAddress + 481, -8192);
+        do Memory.poke(memAddress + 513, -8192);
+        do Memory.poke(memAddress + 545, -8192);
+        do Memory.poke(memAddress + 577, -8192);
+        do Memory.poke(memAddress + 609, -8192);
+        do Memory.poke(memAddress + 641, -8192);
+        do Memory.poke(memAddress + 673, -8192);
+        do Memory.poke(memAddress + 705, -8192);
+        do Memory.poke(memAddress + 737, -8192);
+        do Memory.poke(memAddress + 769, -8192);
+        do Memory.poke(memAddress + 801, -8192);
+        do Memory.poke(memAddress + 833, -8192);
+        do Memory.poke(memAddress + 865, -8192);
+        do Memory.poke(memAddress + 897, -8192);
+        do Memory.poke(memAddress + 929, -1);
+        do Memory.poke(memAddress + 961, -1);
+        do Memory.poke(memAddress + 993, -1);
+        return;
+    }
+
+    // Erase square obstacle 1 (32x32)
+    function void eraseSquareObstacle1(int x, int y) {
+        var int memAddress, i, offset;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 993)) {
+            return;
+        }
+
+        let i = 0;
+        while (i < 32) {
+            let offset = i * 32;
+            do Memory.poke(memAddress + offset, 0);
+            do Memory.poke(memAddress + offset + 1, 0);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    // Draw square obstacle 2 (32x32)
+    function void drawSquareObstacle2(int x, int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 993)) {
+            return;
+        }
+
+        // column 0
+        do Memory.poke(memAddress, -1);
+        do Memory.poke(memAddress + 32, -1);
+        do Memory.poke(memAddress + 64, 3075);
+        do Memory.poke(memAddress + 96, 3075);
+        do Memory.poke(memAddress + 128, 3075);
+        do Memory.poke(memAddress + 160, 3075);
+        do Memory.poke(memAddress + 192, 3075);
+        do Memory.poke(memAddress + 224, 3075);
+        do Memory.poke(memAddress + 256, 3075);
+        do Memory.poke(memAddress + 288, 3075);
+        do Memory.poke(memAddress + 320, -1);
+        do Memory.poke(memAddress + 352, -1);
+        do Memory.poke(memAddress + 384, 3075);
+        do Memory.poke(memAddress + 416, 3075);
+        do Memory.poke(memAddress + 448, 3075);
+        do Memory.poke(memAddress + 480, 3075);
+        do Memory.poke(memAddress + 512, 3075);
+        do Memory.poke(memAddress + 544, 3075);
+        do Memory.poke(memAddress + 576, 3075);
+        do Memory.poke(memAddress + 608, 3075);
+        do Memory.poke(memAddress + 640, -1);
+        do Memory.poke(memAddress + 672, -1);
+        do Memory.poke(memAddress + 704, 3075);
+        do Memory.poke(memAddress + 736, 3075);
+        do Memory.poke(memAddress + 768, 3075);
+        do Memory.poke(memAddress + 800, 3075);
+        do Memory.poke(memAddress + 832, 3075);
+        do Memory.poke(memAddress + 864, 3075);
+        do Memory.poke(memAddress + 896, 3075);
+        do Memory.poke(memAddress + 928, 3075);
+        do Memory.poke(memAddress + 960, -1);
+        do Memory.poke(memAddress + 992, -1);
+
+        // column 1
+        do Memory.poke(memAddress + 1, -1);
+        do Memory.poke(memAddress + 33, -1);
+        do Memory.poke(memAddress + 65, -16336);
+        do Memory.poke(memAddress + 97, -16336);
+        do Memory.poke(memAddress + 129, -16336);
+        do Memory.poke(memAddress + 161, -16336);
+        do Memory.poke(memAddress + 193, -16336);
+        do Memory.poke(memAddress + 225, -16336);
+        do Memory.poke(memAddress + 257, -16336);
+        do Memory.poke(memAddress + 289, -16336);
+        do Memory.poke(memAddress + 321, -1);
+        do Memory.poke(memAddress + 353, -1);
+        do Memory.poke(memAddress + 385, -16336);
+        do Memory.poke(memAddress + 417, -16336);
+        do Memory.poke(memAddress + 449, -16336);
+        do Memory.poke(memAddress + 481, -16336);
+        do Memory.poke(memAddress + 513, -16336);
+        do Memory.poke(memAddress + 545, -16336);
+        do Memory.poke(memAddress + 577, -16336);
+        do Memory.poke(memAddress + 609, -16336);
+        do Memory.poke(memAddress + 641, -1);
+        do Memory.poke(memAddress + 673, -1);
+        do Memory.poke(memAddress + 705, -16336);
+        do Memory.poke(memAddress + 737, -16336);
+        do Memory.poke(memAddress + 769, -16336);
+        do Memory.poke(memAddress + 801, -16336);
+        do Memory.poke(memAddress + 833, -16336);
+        do Memory.poke(memAddress + 865, -16336);
+        do Memory.poke(memAddress + 897, -16336);
+        do Memory.poke(memAddress + 929, -16336);
+        do Memory.poke(memAddress + 961, -1);
+        do Memory.poke(memAddress + 993, -1);
+        return;
+    }
+
+    // Erase square obstacle 2 (32x32)
+    function void eraseSquareObstacle2(int x, int y) {
+        var int memAddress, i, offset;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 993)) {
+            return;
+        }
+
+        let i = 0;
+        while (i < 32) {
+            let offset = i * 32;
+            do Memory.poke(memAddress + offset, 0);
+            do Memory.poke(memAddress + offset + 1, 0);
+            let i = i + 1;
+        }
+        return;
+    }
+
+    // Draw triangular bed obstacle 1 (64x8)
+    function void drawTriangularBed1(int x, int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 227)) {
+            return;
+        }
+
+        // column 0
+        do Memory.poke(memAddress, ~32767);
+        do Memory.poke(memAddress + 32, ~32767);
+        do Memory.poke(memAddress + 64, -32736);
+        do Memory.poke(memAddress + 96, -16288);
+        do Memory.poke(memAddress + 128, -8080);
+        do Memory.poke(memAddress + 160, -1800);
+        do Memory.poke(memAddress + 192, -4);
+        do Memory.poke(memAddress + 224, -1);
+
+        // column 1
+        do Memory.poke(memAddress + 33, 1);
+        do Memory.poke(memAddress + 65, 1);
+        do Memory.poke(memAddress + 97, 129);
+        do Memory.poke(memAddress + 129, 8579);
+        do Memory.poke(memAddress + 161, -1081);
+        do Memory.poke(memAddress + 193, -9);
+        do Memory.poke(memAddress + 225, -1);
+
+        // column 2
+        do Memory.poke(memAddress + 34, 16388);
+        do Memory.poke(memAddress + 66, 28686);
+        do Memory.poke(memAddress + 98, -2034);
+        do Memory.poke(memAddress + 130, -481);
+        do Memory.poke(memAddress + 162, -65);
+        do Memory.poke(memAddress + 194, -1);
+        do Memory.poke(memAddress + 226, -1);
+
+        // column 3
+        do Memory.poke(memAddress + 67, 1024);
+        do Memory.poke(memAddress + 99, 3585);
+        do Memory.poke(memAddress + 131, 3591);
+        do Memory.poke(memAddress + 163, -12529);
+        do Memory.poke(memAddress + 195, -97);
+        do Memory.poke(memAddress + 227, -1);
+        return;
+    }
+
+    // Erase triangular bed obstacle 1 (64x8)
+    function void eraseTriangularBed1(int x, int y) {
+        var int memAddress, i, j, offset;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 227)) {
+            return;
+        }
+
+        let i = 0;
+        while (i < 8) {
+            let offset = i * 32;
+            let j = 0;
+            while (j < 4) {  // 4 columns (64 pixels wide)
+                do Memory.poke(memAddress + offset + j, 0);
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    // Draw triangular bed obstacle 2 (64x12)
+    function void drawTriangularBed2(int x, int y) {
+        var int memAddress;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 355)) {
+            return;
+        }
+
+        // column 0
+        do Memory.poke(memAddress, 128);
+        do Memory.poke(memAddress + 32, 384);
+        do Memory.poke(memAddress + 64, 448);
+        do Memory.poke(memAddress + 96, 448);
+        do Memory.poke(memAddress + 128, 992);
+        do Memory.poke(memAddress + 160, 1008);
+        do Memory.poke(memAddress + 192, -31760);
+        do Memory.poke(memAddress + 224, -15368);
+        do Memory.poke(memAddress + 256, -14340);
+        do Memory.poke(memAddress + 288, -6148);
+        do Memory.poke(memAddress + 320, -4098);
+        do Memory.poke(memAddress + 352, -1);
+
+        // column 1
+        do Memory.poke(memAddress + 33, 16384);
+        do Memory.poke(memAddress + 65, -8192);
+        do Memory.poke(memAddress + 97, -8192);
+        do Memory.poke(memAddress + 129, -4096);
+        do Memory.poke(memAddress + 161, -4095);
+        do Memory.poke(memAddress + 193, -3967);
+        do Memory.poke(memAddress + 225, -3903);
+        do Memory.poke(memAddress + 257, -1821);
+        do Memory.poke(memAddress + 289, -777);
+        do Memory.poke(memAddress + 321, -1);
+        do Memory.poke(memAddress + 353, -1);
+
+        // column 2
+        do Memory.poke(memAddress + 130, 1024);
+        do Memory.poke(memAddress + 162, 1027);
+        do Memory.poke(memAddress + 194, 3587);
+        do Memory.poke(memAddress + 226, 7939);
+        do Memory.poke(memAddress + 258, 8067);
+        do Memory.poke(memAddress + 290, 16327);
+        do Memory.poke(memAddress + 322, 32751);
+        do Memory.poke(memAddress + 354, -1);
+
+        // column 3
+        do Memory.poke(memAddress + 35, 4096);
+        do Memory.poke(memAddress + 67, 6144);
+        do Memory.poke(memAddress + 99, 14336);
+        do Memory.poke(memAddress + 131, 31744);
+        do Memory.poke(memAddress + 163, 32256);
+        do Memory.poke(memAddress + 195, 32512);
+        do Memory.poke(memAddress + 227, 32640);
+        do Memory.poke(memAddress + 259, 32736);
+        do Memory.poke(memAddress + 291, 32760);
+        do Memory.poke(memAddress + 323, -2);
+        do Memory.poke(memAddress + 355, -1);
+        return;
+    }
+
+    // Erase triangular bed obstacle 2 (64x12)
+    function void eraseTriangularBed2(int x, int y) {
+        var int memAddress, i, j, offset;
+        let memAddress = Graphics.getMemoryAddress(x, y);
+
+        if (~Graphics.isAddressValid(memAddress, 355)) {
+            return;
+        }
+
+        let i = 0;
+        while (i < 12) {
+            let offset = i * 32;
+            let j = 0;
+            while (j < 4) {  // 4 columns (64 pixels wide)
+                do Memory.poke(memAddress + offset + j, 0);
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    /** Returns the Y position of the ground level. */
+    function int groundLevel() {
+        // one pixel above bottom (0..239 valid)
+        return 239;
+    }
+    
+    /** Draws a circle outline centered at (xc,yc) with radius r */
+    function void drawCircle(int xc, int yc, int r) {
+        // use built-in filled circle; radius must be <=181
+        do Screen.drawCircle(xc, yc, r);
+        return;
+    }
+    /** Erase a circle outline (power-up) at xc,yc with radius r */
+    function void eraseCircle(int xc, int yc, int r) {
+        do Screen.setColor(false);
+        do Screen.drawCircle(xc, yc, r);
+        return;
+    }
+}
+

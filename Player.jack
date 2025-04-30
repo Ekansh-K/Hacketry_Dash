@@ -1,0 +1,151 @@
+class Player {
+    field int x, y;
+    field int width, height;
+    field int yVelocity;
+    field boolean isOnGround;
+    field int initialY;
+
+    constructor Player new(int ax, int ay) {
+        let x = ax;
+        let width = 32;
+        let height = 32;
+        // Raise player 4 pixels higher than ground level
+        let y = Graphics.groundLevel() - height - 4;
+        let initialY = y;
+        let yVelocity = 0;
+        let isOnGround = true;
+        do draw();
+        return this;
+    }
+
+    method void dispose() {
+        do erase();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void draw() {
+        do Graphics.drawPlayer(x, y);
+        return;
+    }
+
+    method void erase() {
+        do Graphics.erasePlayer(x, y);
+        return;
+    }
+
+    method void update() {
+        var int groundY;
+        do erase();
+
+        // Calculate raised ground position (4 pixels higher)
+        let groundY = Graphics.groundLevel() - height - 4;
+
+        // Apply gravity
+        let y = y + yVelocity;
+
+        // Check if player hit or went below the raised ground level
+        if (y > groundY) {
+            let y = groundY; // Set player exactly on the raised ground
+            let yVelocity = 0;
+            let isOnGround = true;
+        } else {
+            // Apply gravity acceleration (if not on ground)
+            let yVelocity = yVelocity + 1;
+            // Optional: Limit maximum falling speed
+            if (yVelocity > 10) {
+                let yVelocity = 10;
+            }
+            let isOnGround = false;
+        }
+        do draw();
+        return;
+    }
+
+    method boolean jump() {
+        if (isOnGround) {
+            let yVelocity = -12;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
+    }
+
+    method void reset() {
+        do erase();
+        let y = initialY;
+        let yVelocity = 0;
+        let isOnGround = true;
+        do draw();
+        return;
+    }
+
+    method int collision_box_x() {
+        return x; 
+    }
+
+    method int collision_box_y() {
+        return y;
+    }
+
+    method int collision_box_width() {
+        return width;
+    }
+
+    method int collision_box_height() {
+        return height;
+    }
+
+    method void land(int surfaceY) {
+        // Place player on top of obstacle and reset vertical motion
+        let y = surfaceY - height;
+        let yVelocity = 0;
+        let isOnGround = true;
+        do draw();
+        return;
+    }
+
+    method void updateInverted() {
+        do erase();
+        // Apply inverted gravity
+        let y = y + yVelocity;
+        // Check collision with ceiling (y=16)
+        if (y < 16) {
+            let y = 16;
+            let yVelocity = 0;
+            let isOnGround = true;
+        } else {
+            // accelerate upward (inverted gravity)
+            let yVelocity = yVelocity - 1;
+            if (yVelocity < -10) { let yVelocity = -10; }
+            let isOnGround = false;
+        }
+        do draw();
+        return;
+    }
+
+    method boolean jumpDouble() {
+        if (isOnGround) {
+            let yVelocity = -24;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
+    }
+
+    method boolean jumpInverted() {
+        // always apply inverted jump
+        let yVelocity = 12;
+        let isOnGround = false;
+        return true;
+    }
+
+    method boolean jumpDoubleInverted() {
+        if (isOnGround) {
+            let yVelocity = 24;
+            let isOnGround = false;
+            return true;
+        }
+        return false;
+    }
+}

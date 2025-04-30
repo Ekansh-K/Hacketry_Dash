@@ -1,0 +1,105 @@
+/**
+ * EndScreen class handles the win and game over screens
+ * showing scores and options to restart or quit.
+ */
+class EndScreen {
+    // Screen messages
+    field String gameOverMessage;
+    field String winMessage;
+    field String scoreMessage;
+    field String highScoreMessage;
+    field String restartPrompt;
+
+    /** Constructor initializes message strings */
+    constructor EndScreen new() {
+        let gameOverMessage = "Game Over!";
+        let winMessage = "You Win!";
+        let scoreMessage = "Score: ";
+        let highScoreMessage = "High Score: ";
+        let restartPrompt = "Press R to restart, Q to quit";
+        return this;
+    }
+
+    /** Frees the memory allocated for this EndScreen */
+    method void dispose() {
+        do gameOverMessage.dispose();
+        do winMessage.dispose();
+        do scoreMessage.dispose();
+        do highScoreMessage.dispose();
+        do restartPrompt.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Internal method to display end screen */
+    method boolean showEndScreen(boolean isWin, int score, int highScore) {
+        var char key;
+        var boolean exit;
+
+        do Screen.clearScreen();
+
+        do Output.moveCursor(8, 27);
+        if (isWin) {
+            do Output.printString(winMessage);
+        } 
+        else {
+            do Output.printString(gameOverMessage);
+        }
+
+        do Output.moveCursor(12, 20);
+        do Output.printString(scoreMessage);
+        do Output.printInt(score);
+
+        do Output.moveCursor(14, 20);
+        do Output.printString(highScoreMessage);
+        do Output.printInt(highScore);
+        // display a random motivational message
+        do printMotiv(score);
+
+        do Output.moveCursor(18, 17);
+        do Output.printString(restartPrompt);
+
+        while (~(Keyboard.keyPressed() = 0)) {}
+        do Sys.wait(100);
+
+        let exit = false;
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+            if (key = 82) { 
+                let exit = true;
+                while (~(Keyboard.keyPressed() = 0)) {}
+                return true;  
+            }
+            if (key = 81) {  
+                let exit = true;
+                while (~(Keyboard.keyPressed() = 0)) {}
+                return false;  
+            }
+        }
+        return false;
+    }
+
+    /** Trigger crash end screen */
+    method boolean crash(int score, int highScore) {
+        return showEndScreen(false, score, highScore);
+    }
+
+    /** Trigger win end screen */
+    method boolean win(int score, int highScore) {
+        return showEndScreen(true, score, highScore);
+    }
+
+    /** Display a random motivational quote based on score */
+    method void printMotiv(int score) {
+        var int i;
+        // seed RNG to pick quote
+        do Random.setSeed(score);
+        let i = Random.randRange(0, 3);
+        do Output.moveCursor(17, 10);
+        if (i = 0) { do Output.printString("What was the House wearing? Address."); }
+        if (i = 1) { do Output.printString("A person who thinks all the time"); }
+        if (i = 2) { do Output.printString("Stack Pointer when a 9 pointer walks in"); }
+        if (i = 3) { do Output.printString("next time lil bro"); }
+        return;
+    }
+}

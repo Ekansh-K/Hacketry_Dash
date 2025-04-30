@@ -1,0 +1,49 @@
+// Menu.jack: level selection menu
+class Menu {
+    function int run() {
+        var int levelIndex;
+        var int key;
+        var boolean exit;
+
+        let levelIndex = 1;  
+        let exit = false;
+        do Screen.clearScreen();
+        while (~exit) {
+            // Draw menu UI
+            do Output.moveCursor(2, 25);
+            do Output.printString("Select Level: ");
+            do Output.printInt(levelIndex);
+
+            // Draw navigation arrows
+            do Output.moveCursor(16, 10);
+            do Output.printString("<");
+            do Output.moveCursor(16, 52);
+            do Output.printString(">");
+
+            // Draw centered play button: circle then triangle inside
+            do Screen.setColor(true);
+            do Graphics.drawCircle(256, 128, 32);
+            do Screen.setColor(false);
+
+            // Handle input
+            let key = Keyboard.keyPressed();
+            if (key = 132) {  // Right arrow
+                let levelIndex = levelIndex + 1;
+                if (levelIndex > 5) { let levelIndex = 1; }
+            } else {
+                if (key = 130) {  // Left arrow
+                    let levelIndex = levelIndex - 1;
+                    if (levelIndex < 1) { let levelIndex = 5; }
+                } else {
+                    if (key = 32) {  // Space key to select
+                        let exit = true;
+                    }
+                }
+            }
+            // Redraw each loop
+            do Sys.wait(100);
+            do Screen.clearScreen();
+        }
+        return levelIndex;
+    }
+}
