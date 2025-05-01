@@ -319,7 +319,7 @@ class GeometryDash {
                     let py = player.collision_box_y();
                     let ph = player.collision_box_height();
                     if ((py + ph) < (lvl4Sq1.getY() + 8)) {
-                        do player.land(lvlSQ1.getY());
+                        do player.land(lvl4Sq1.getY());
                     } else {
                         let crashed = true;
                     } } }
